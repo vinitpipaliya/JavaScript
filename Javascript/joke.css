@@ -1,0 +1,53 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+header{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+header h1{
+    padding: 3vh 0;
+}
+h1:hover{
+    color: rgb(32, 157, 202);
+    font-weight: bold;
+}
+main {
+    height:auto;
+}
+.container{
+    width:80vw;
+    height:40vh;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 10vh 10vw;
+    text-decoration: dotted;
+}
+.box{
+    border: 2px solid black;
+    width: 100%;
+    height: 100%;
+    font-size: 10vh;
+    padding: 15vh 0 0 0 ;
+}
+span:hover{
+    color: rgb(32, 157, 202);
+    font-weight: bold;
+}
+footer{
+    color: rgb(0,255,123);
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+footer p{
+    padding:10vh 0 0 0;
+    color:black;
+    font-size:3.5vh;
+
+}
