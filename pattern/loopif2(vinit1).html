@@ -1,0 +1,685 @@
+<script>
+      /*
+          * * * * * * * *
+          *             *
+          *             *
+          * * * * * * * *
+
+          *
+          * *
+          *   *
+          *     *
+          * * * * *
+
+          * * * * *
+          *     *
+          *   *
+          * *
+          *
+
+              *
+             * *
+            * * *
+           * * * *
+          * * * * *
+           * * * *
+            * * *
+             * *
+              *
+
+          * * * * * * * * * *
+          * * * *     * * * *
+          * * *         * * *
+          * *             * *
+          *                 *
+          * *             * *
+          * * *         * * *
+          * * * *     * * * *
+          * * * * * * * * * *
+
+
+                  *
+                 * *
+                *   *
+               *     *
+              *       *
+               *     *
+                *   *
+                 * *
+                  *
+
+                  * * * *
+                  *     * tamari rite dhaja.
+                  * * * *
+                  *
+                  *
+                 * *
+                *   *
+               *     *
+              *       *
+              *  * *  *
+              *  * *  *
+              * * * * *
+               * * * *
+                * * *
+
+
+
+      */
+      // var ll = parseInt(prompt('Enter value:'));
+      // if (ll <= 0 || ll >= 220) {
+      //     ll = 4
+      // }
+
+      // for (var i = 0; i < ll; i++) {
+      //     for (var j = 0; j < ll; j++) {
+      //         if (i == 0 || j == 0 || i == ll - 1 || j == ll - 1) {
+      //             document.write("* ")
+      //         }
+      //         else {
+      //             document.write("&nbsp;&nbsp; ")
+      //         }
+      //     }
+      //     document.write('<br/>')
+      // }
+
+
+      //1
+      // for (var i = 1; i <= 5; i++) {
+      //     for (var j = 1; j <= 5; j++) {
+      //         if ((i == 1 || i == 5) && j <= 5) {
+      //             document.write("* &nbsp; ")
+      //         }
+      //         else if ((i >= 2 && i <= 4) && (j == 1 || j == 5)) {
+      //             document.write("* &nbsp; ")
+      //         }
+      //         else {
+      //             document.write('&nbsp;&nbsp;&nbsp;&nbsp; ')
+      //         }
+      //     }
+      //     document.write('<br/>')
+      // }
+
+  //2
+      // for(var i=1;i<=5;i++){
+      //     for(var j=1;j<=5;j++){
+      //         if((i<=2 || i==5 )&& j<=i){
+      //             document.write("* ")
+      //         }
+      //         else if((i>=3 && i<=4) && (j==1 || j==i)){
+      //             document.write("* ")
+      //         }
+      //         else{
+      //             document.write('&nbsp;&nbsp; ')
+      //         }
+      //     }
+      //     document.write("<br/>")
+      // }
+
+  //3
+      // var k=5;
+      // for(var i=1;i<=5;i++){
+      //     for(var j=1;j<=5;j++){
+      //         if((i==1 && j<=5)||(i==5 && j==1)){
+      //             document.write("* ")
+      //         }
+      //         else if((i>=2 && i<=4) && (j==1 || j==k)){
+      //             document.write("* ")
+      //         }
+      //         else{
+      //             document.write('&nbsp;&nbsp; ')
+      //         }
+      //     }
+      //     k--;
+      //     document.write("<br/>")
+      // }
+
+      //4
+      // for(var i=1;i<=9;i++){
+      //     var k=1;
+      //     for(var j=1;j<=9;j++){
+      //         if(i<=5 && (j>=6-i && j<=4+i && k) ){
+      //             document.write("* ")
+      //             k=0;
+      //         }
+      //         else if(i>5 && (j>=i-4 && j<=14-i && k)){
+      //             document.write("* ")
+      //              k=0;
+      //         }
+      //         else{
+      //             document.write('&nbsp;&nbsp; ')
+      //             k=1;
+      //         }
+      //     }
+      //     document.write("<br/>")
+      // }
+
+      //5
+      // for(var i=1;i<=9;i++){
+      //     for(var j=1;j<=9;j++){
+      //         if(i<=5 && (j<=6-i || j>=4+i)){
+      //             document.write("* ")
+      //         }
+      //         else if(i>5 && (j<=i-4 || j>=14-i)){
+      //             document.write("* ")
+      //         }
+      //         else{
+      //             document.write('&nbsp;&nbsp; ')
+      //         }
+      //     }
+      //     document.write("<br/>")
+      // }
+
+      //6 --> Dynamic
+      // var n=100;
+      // for(var i=1;i<=n;i++){
+      //     for(var j=1;j<=n;j++){
+      //         if(n%2!=0){
+      //             if(i<=((n/2 | 0)+1) && (j==((n/2 | 0)+2)-i || j==((n/2 | 0))+i)){
+      //                 document.write("* ")
+      //             }
+      //             else if(i>((n/2 | 0)+1) && (j==i-(n/2 | 0) || j==(n+(n/2 | 0)+1)-i)){
+      //                 document.write("* ")
+      //             }
+      //             else{
+      //                 document.write('&nbsp;&nbsp; ')
+      //             }
+      //         }
+      //         else{
+      //             if(i<=(n/2) && (j==((n/2)+1)-i || j==((n/2)+i))){
+      //                 document.write("* ")
+      //             }
+      //             else if(i>(n/2) && (j==i-(n/2) || j==(n+(n/2)+1)-i)){
+      //                 document.write("* ")
+      //             }
+      //             else{
+      //                 document.write('&nbsp;&nbsp; ')
+      //             }
+      //         }
+      //     }
+      //     document.write("<br/>")
+      // }
+
+      // for(var i=1;i<=9;i++){
+      //     for(var j=1;j<=9;j++){
+      //         if(i<=5 && (j==6-i || j==4+i)){
+      //             document.write("* ")
+      //         }
+      //         else if(i>5 && (j==i-4 || j==14-i)){
+      //             document.write("* ")
+      //         }
+      //         else{
+      //             document.write('&nbsp;&nbsp; ')
+      //         }
+      //     }
+      //     document.write("<br/>")
+      // }
+
+
+    //  var n=30;
+    //   for(var i=1;i<=n;i++){
+    //       var k=0;
+    //       for(var j=1;j<=(n-5);j++){
+    //           if(i<=((n*5)/14 | 0) && j==(((n-5)/2 | 0)+1)){
+    //               document.write("* ")
+    //           }
+    //           else if(i<=3 && j>=(((n-5)/2|0)+2) && j<=(((n-5)/2 | 0)+4) &&  (i==1 || i==3 || j==(((n-5)/2 | 0)+4))){
+    //               document.write("* ")
+    //           }
+    //           else if(i>=(((n*5)/14 | 0)+1) && i<=((n*4)/7| 0) && (j==((((n*5)/7 | 0)+1-i) || (j==i)))){
+    //               document.write("* ")
+    //           }
+    //           else if(i>=(n-5) && i<=(n-2) && (j==1 || j==(n-5))){
+    //               document.write("* ")
+    //           }
+    //           else if((i==(n-5) || i==(n-2)) && (j<=(n-5) && k)) {
+    //               document.write("* ");
+    //               k=0;
+    //           }
+    //           else if((i==(n-4) || i==(n-3)) && (j==(n-10) || j==(n-8))){
+    //               document.write("* ");
+    //           }
+    //           else if(i==(n-1) && j%2==0){
+    //                   document.write("* ");
+    //           }
+    //           else if(i==n && j>=(n-11) && j<=(n-7) && j%2!=0){
+    //               document.write("* ");
+    //           }
+    //           else{
+    //               document.write('&nbsp;&nbsp; ')
+    //               k=1;
+    //           }
+    //       }
+    //       document.write("<br/>")
+    //   }
+
+      // MANDIR
+      // for(var i=1;i<=14;i++){
+      //     var k=0;
+      //     for(var j=1;j<=9;j++){
+      //         if(i<=5 && j==5){
+      //             document.write("* ")
+      //         }
+      //         else if(i<=3 && j>=6 && j<=8 &&  (i==1 || i==3 || j==8)){
+      //             document.write("* ")
+      //         }
+      //         else if(i>=6 && i<=8 && (j==(10-i) || (j==i))){
+      //             document.write("* ")
+      //         }
+      //         else if(i>=9 && i<=12 && (j==1 || j==9)){
+      //             document.write("* ")
+      //         }
+      //         else if((i==9 || i==12) && (j<=9 && k)) {
+      //             document.write("* ");
+      //             k=0;
+      //         }
+      //         else if((i==10 || i==11) && (j==4 || j==6)){
+      //             document.write("* ");
+      //         }
+      //         else if(i==13 && j%2==0){
+      //                 document.write("* ");
+      //         }
+      //         else if(i==14 && j>=3 && j<=7 && j%2!=0){
+      //             document.write("* ");
+      //         }
+      //         else{
+      //             document.write('&nbsp;&nbsp; ')
+      //             k=1;
+      //         }
+      //     }
+      //     document.write("<br/>")
+      // }
+
+
+      //Name Pattern
+         
+    //   for(var i=1;i<=5;i++){
+    //       for(var j=1;j<=34;j++){
+    //           //for V
+    //           if(i==j || j==(10-i)){
+    //               document.write("* ")
+    //           }
+    //           //for I
+    //           else if((i==1 || i==5 ) && (j>=11 && j<=15) || j==13) {
+    //               document.write("* ")
+    //           }
+    //           //for N
+    //           else if(j==17 || j==21 || (j==(16+i))){
+    //               document.write("* ")
+    //           }
+    //           else if((i==1 || i==5) && (j>=23 && j<=27) || j==25){
+    //               document.write("* ")
+    //           }
+    //           else if(i==1 && (j>=29 && j<=33) || j==31){
+    //               document.write("* ")
+    //           }
+    //           else if(j==10 || j==16 || j==22 || j==26){
+    //               document.write('&nbsp;&nbsp; ')
+    //           }
+    //           else{
+    //               document.write('&nbsp;&nbsp; ')
+    //           }
+    //       }
+    //       document.write("<br/>")
+    //   }
+
+    //   let n=prompt("ENter Your NAme");
+    //   var m=[]
+    //   for(var i=1;i<=5;i++){
+    //       for(var j=1;j<=34;j++){
+    //         for(let k=0;k<n.length;k++){
+    //             if(n[k]==="v"){
+    //                 if(i==j || j==(10-i)){
+    //                     document.write("* ")
+    //                 }
+    //                 else{
+    //                     document.write('&nbsp;&nbsp; ')
+    //                 }
+    //             }
+    //             m.push(k)
+    //           //for I
+    //           document.write(k)
+    //           if(n[k]==="n"){
+    //                if((i==1 || i==5 ) && (j>=11 && j<=15) || j==13) {
+    //                   document.write("* ")
+    //                 }
+    //                 else{
+    //                     document.write('&nbsp;&nbsp; ')
+    //                 }
+    //             }
+    //             m.push(k)
+    //             //for N
+    //             else if(j==17 || j==21 || (j==(16+i))){
+    //                 document.write("* ")
+    //             }
+    //             else if((i==1 || i==5) && (j>=23 && j<=27) || j==25){
+    //                 document.write("* ")
+    //             }
+    //             else if(i==1 && (j>=29 && j<=33) || j==31){
+    //                 document.write("* ")
+    //             }
+    //             else if(j==10 || j==16 || j==22 || j==26){
+    //                 document.write('&nbsp;&nbsp; ')
+    //             }
+    //             else{
+    //                 document.write('&nbsp;&nbsp; ')
+    //             }
+    //         }
+    //       }
+    //       document.write("<br/>")
+    //   }
+
+    //Sathiyo --> Dynamic
+    // var n=100;
+    //   for(var i=1;i<=n;i++){
+    //     for(var j=1;j<=n;j++){
+    //         if(n%2!=0){
+    //             if( i<=((n/2 | 0)+1) && (j==1 || i==((n/2 | 0)+1) ) || j==((n/2 | 0)+1)) {
+    //                 document.write("* ")
+    //             }
+    //             else if(i==1 && j>=((n/2 | 0)+1)){
+    //                 document.write("* ")
+    //             }
+    //             else if((i>=((n/2 | 0)+1) && j==n) || (i==n && j<=((n/2 | 0)+1))){
+    //                 document.write("* ")
+    //             }
+    //             else{
+    //                 document.write('&nbsp;&nbsp; ')
+    //             }
+    //         }
+    //         else{
+    //             if( i<=((n/2)) && (j==1 || i==((n/2)) ) || j==((n/2))) {
+    //                 document.write("* ")
+    //             }
+    //             else if(i==1 && j>=((n/2))){
+    //                 document.write("* ")
+    //             }
+    //             else if((i>=((n/2)) && j==n) || (i==n && j<=((n/2)))){
+    //                 document.write("* ")
+    //             }
+    //             else{
+    //                 document.write('&nbsp;&nbsp; ')
+    //             }
+    //         }
+    //     }
+    //     document.write("<br/>")
+    //   }
+    
+
+    // MANAS
+    // for(var i=1;i<=14;i++){
+    //     for(var j=1;j<=14;j++){
+    //         if(j==7 && ((i==1) || (i>=4 && i<=10))){
+    //             document.write("* ")
+    //         }
+    //         else if((j==5 || j==9) && i>=2 && i<=3){
+    //             document.write("* ")
+    //         }
+    //         else if(i==6 && (j>=4 && j<=11)){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=4 && i<=6 ) && (j==(i-3))){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=7 && i<=8) && (j==(i+5))){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=11 && i<=14) && (j==(17-i) || j==(i-3))){
+    //             document.write("* ")
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+    // Double Diamond
+    // for(var i=1;i<=15;i++){
+    //     for(var j=1;j<=15;j++){
+    //         if(i==8 || j==8){
+    //             document.write("* ")
+    //         }
+    //         else if(j==(9-i) || j==(7+i) || j==(i-7) || j==(23-i)){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=6 && i<=7) && (j==(13-i) || j==(i+3))){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=9 && i<=10) && (j==(i-3) || j==(19-i))){
+    //             document.write("* ")
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+    // var n=15;
+    // var n4=(n/4 | 0);
+    // var n2=(n/2 | 0);
+    // for(var i=1;i<=n;i++){
+    //     for(var j=1;j<=n;j++){
+    //         if(i==((n/2 | 0) +1) || j==((n/2 | 0) +1)){
+    //             document.write("* ")
+    //         }
+    //         else if(j==(((n/2 | 0) +2)-i) || j==((n/2 | 0)+i) || j==(i-(n/2 | 0)) || j==((n+((n/2 | 0)+1))-i)){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=(((n/4 |0))) && i<=(n/2 |0)) && (j==((n2+n4+1)-i) || j==(n4+n2+i))){
+    //             document.write("* ")
+    //         }
+    //         // else if((i>=9 && i<=10) && (j==(i-3) || j==(19-i))){
+    //         //     document.write("* ")
+    //         // }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+
+    //Arrows    
+    // for(var i=1;i<=17;i++){
+    //     for(var j=1;j<=17;j++){
+    //         if((i<=5 || i>=13) && (j==8 || j==10)){
+    //             document.write("* ")
+    //         }
+    //         else if((i==8 || i==10) && (j<=5 || j>=13)){
+    //             document.write("* ")
+    //         }
+    //         else if(i==9 && j==9){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=5 && i<=13) && ((j==i) || (j==5))) {
+    //             document.write("* ")
+    //         }
+    //         else if(((i==5) || (i==13)) && ((j>=5) && (j<=13))){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=5 && i<=13) && ((j==(18-i)) || (j==13))) {
+    //             document.write("* ")
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+    
+    //~~~~~Arrows   
+    // for(var i=1;i<=17;i++){
+    //     for(var j=1;j<=17;j++){
+    //         if((i<=5 || i>=13) && (j==8 || j==10)){
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else if((i==8 || i==10) && (j<=5 || j>=13)){
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else if(i==9 && j==9){
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else if((i>=5 && i<=13) && ((j==i) || (j==5))) {
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else if(((i==5) || (i==13)) && ((j>=7) && (j<=11))){
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else if((i>=5 && i<=13) && ((j==(18-i)) || (j==13))) {
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else if((j==8 || j==10) && (i==7 || i==11)){
+    //             document.write("*&nbsp; ")
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+   
+    // Star-Pattern
+    // for(var i=1;i<=12;i++){
+    //     for(var j=1;j<=19;j++){
+    //         if(i==6 && (j<=5 || j>=15)){
+    //             document.write("* ")
+    //         }
+    //         else if(i<6 && (j==(11-i) || j==(9+i))){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=7 && i<=9) && (j==(i-5) || j==(25-i))){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=10 && i<=12) && (j==(13-i) || j==(i+7))){
+    //             document.write("* ")
+    //         }
+    //         else if((i==9 && j==10) || (i==10 && (j==7 || j==13)) || (i==11 && (j==3 || j==17))){
+    //             document.write("* ");
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+    // CHAT PATTERN
+    // for(var i=1;i<=17;i++){
+    //     for(var j=1;j<=17;j++){
+    //         if((i==1 || i==7 || i==11 || i==17) && (j==1 || j==17)){
+    //         document.write('&nbsp;&nbsp; ')
+    //         }
+    //         else if((i==7) && (j>=4 && j<=6)){
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //         else if(i<=7 && (i==1 || i==7 || j==1 || j==17)){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=8 && i<=9) && (j==(i-4) || j==(14-i))){
+    //             document.write("* ")
+    //         }
+    //         else if((i==11) && (j>=12 && j<=14)){
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //         else if(i>=11 && (i==11 || i==17 || j==1 || j==17)){
+    //             document.write("* ")
+    //         }
+    //         else if((i>=9 && i<=11) && (j==(i+4) || j==(22-i))){
+    //             document.write("* ")
+    //         }
+    //         else{ 
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+ 
+    var n=17
+    var a=parseInt(n*(7/17))
+    var a2=parseInt(n*(11/17))
+    var b=parseInt(n*(4/17))
+    var b2=parseInt(n*(6/17))
+    var c=parseInt(n*(8/17))
+    var c2=parseInt(n*(9/17))
+    var d=parseInt(n*(12/17))
+    var d2=parseInt(n*(14/17))
+    var e=parseInt(n*(22/17))
+    for(var i=1;i<=n;i++){
+        for(var j=1;j<=n;j++){
+            if((i==1 || i==a || i==a2 || i==n) && (j==1 || j==n)){
+            document.write('&nbsp;&nbsp; ')
+            }
+            else if((i==a) && (j>=b && j<=b2)){
+                document.write('&nbsp;&nbsp; ')
+            }
+            else if(i<=a && (i==1 || i==a || j==1 || j==n)){
+                document.write("* ")
+            }
+            else if((i>=c && i<=c2) && (j==(i-b) || j==(d2-i))){
+                document.write("* ")
+            }
+            else if((i==a2) && (j>=d && j<=d2)){
+                document.write('&nbsp;&nbsp; ')
+            }
+            else if(i>=a2 && (i==a2 || i==n || j==1 || j==n)){
+                document.write("* ")
+            }
+            else if((i>=c2 && i<=a2) && (j==(i+b) || j==(e-i))){
+                document.write("* ")
+            }
+            else{ 
+                document.write('&nbsp;&nbsp; ')
+            }
+        }
+        document.write("<br/>")
+    }
+
+
+    // 1-TABLE
+    // for(var i=1;i<=13;i++){
+    //     for(var j=1;j<=5;j++){
+    //         if(i<=9 && j==3){
+    //             document.write("* ")
+    //         }
+    //         else if(i<=3 && j==(4-i) || i==9 ){ 
+    //             document.write("* ")
+    //         }
+    //         else if(i>=9 && (j==1 || j==5)){
+    //             document.write("* ")
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+    
+
+    // Dynamic
+    //  var n=200
+    //  var m=parseInt(n*(5/13))
+    //  var a=parseInt(n*(9/13))
+    // var b=parseInt((m/2))
+    // for(var i=1;i<=n;i++){
+    //     for(var j=1;j<=m;j++){
+    //         if(i<=a && j==b){
+    //             document.write("* ")
+    //         }
+    //         else if(i<=b && j==(b+1-i) || i==a ){ 
+    //             document.write("* ")
+    //         }
+    //         else if(i>=a && (j==1 || j==m)){
+    //             document.write("* ")
+    //         }
+    //         else{
+    //             document.write('&nbsp;&nbsp; ')
+    //         }
+    //     }
+    //     document.write("<br/>")
+    // }
+
+</script>
