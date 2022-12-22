@@ -1,0 +1,426 @@
+<!-- <script>
+    // var nam=prompt("enter name")
+    // var number=prompt("enter number")
+    // var id=1
+    // var data={'id':id,'nam':nam,'number':number}    
+    // document.write(data)
+    // alert(data)
+    var id=[]
+    var q=parseInt(prompt("enrer number"))
+    id.push(q)
+    localStorage.setItem('ID',JSON.stringify(id))
+    alert(id)
+    var id1=localStorage.getItem('ID')
+    var id2=JSON.parse(id1)
+    alert(id1)
+</script> -->
+
+<script>
+    if (localStorage.getItem('data') == null) {
+
+        var data = {
+            id: [],
+            nam: [],
+            number: [],
+            email: [],
+            password: [],
+            price: [],
+            quantity: [],
+            subtotal: [],
+            gst: [],
+            grandtotal: [],
+            stat: [],
+            c: 1
+        };
+    }
+    else {
+        var data = localStorage.getItem('data')
+        data = JSON.parse(data)
+    }
+    do {
+        var mainFlag = true;
+        var mainChoice = parseInt(
+            prompt(
+                "Enter a number: \n\n1.Insert\n2.View\n3.Update\n4.Search\n5.Delete\n6.Exit"
+            )
+        );
+        switch (mainChoice) {
+            case 1:
+                data.id.push(data.c++);
+                do {
+                    var nm = prompt("enter name");
+                } while (nm.lenght < 3);
+                data.nam.push(nm);
+                do {
+                    var flag = true;
+                    var num = prompt("Enter number:");
+                    if (data.number.length == 0 && num.length == 10) {
+                        flag = false;
+                        data.number.push(num);
+                    } else {
+                        var flag2 = true;
+                        for (let i = 0; i < data.number.length; i++) {
+                            if (data.number[i] == num) {
+                                flag2 = false;
+                            }
+                        }
+                        if (flag2 && num.length == 10) {
+                            flag = false;
+                            data.number.push(num);
+                        }
+                    }
+                } while (flag);
+                do {
+                    var flag = true;
+                    var validRegex =
+                        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    var em = prompt("Enter email;");
+                    if (data.email.length == 0 && em.match(validRegex)) {
+                        flag = false;
+                        data.email.push(em);
+                        // alert("in if ")
+                    } else {
+                        // alert("in else")
+                        var flag2 = true;
+                        for (var i = 0; i < em.length; i++) {
+                            if (data.email[i] == em) {
+                                flag2 = false;
+                            }
+                        }
+                        if (flag2 && em.match(validRegex)) {
+                            flag = false;
+                            data.email.push(em);
+                        }
+                    }
+                } while (flag);
+                var passw = /^[A-Za-z]\w{7,14}$/;
+                do {
+                    var pwd = prompt("Enter Password:");
+                } while (pwd.match(passw));
+                data.password.push(pwd);
+                do {
+                    var pr = parseInt(prompt("Enter Price:"));
+                } while (pr <= 0);
+                data.price.push(pr);
+
+                do {
+                    var qun = parseInt(prompt("Enter Quantity"));
+                } while (qun <= 0);
+                data.quantity.push(qun);
+
+                var st = pr * qun;
+                data.subtotal.push(st);
+
+                var tax = parseInt(prompt("Enter GST in %"));
+                data.gst.push(tax);
+                var gstAmount = (st * tax) / 100;
+                var gt = st + gstAmount;
+                data.grandtotal.push(gt);
+                alert(gt);
+
+                var sts = prompt("Enter satus");
+                data.stat.push(sts);
+
+                localStorage.setItem("data", JSON.stringify(data));
+                break;
+            case 2:
+                if (localStorage.getItem("data") == null) {
+                    alert("pehla insert karo");
+                } else {
+                    var getdata = localStorage.getItem("data");
+                    var getdata = JSON.parse(getdata);
+                    var view = "";
+                    for (var i = 0; i < getdata.id.length; i++) {
+                        view =
+                            view +
+                            getdata.id[i] +
+                            "-" +
+                            getdata.nam[i] +
+                            "-" +
+                            getdata.number[i] +
+                            "-" +
+                            getdata.email[i] +
+                            "-" +
+                            getdata.password[i] +
+                            "-" +
+                            getdata.price[i] +
+                            "-" +
+                            getdata.quantity[i] +
+                            "-" +
+                            getdata.subtotal[i] +
+                            "-" +
+                            getdata.gst[i] +
+                            "-" +
+                            getdata.grandtotal[i] +
+                            "-" +
+                            getdata.stat[i] +
+                            "\n";
+                    }
+                    alert(view);
+                }
+                break;
+            case 3:
+                var n = parseInt(prompt("Enter your Id:"));
+                if (localStorage.getItem("data") == null) {
+                    alert("Pehla insert karo.");
+                } else {
+                    var getdata1 = localStorage.getItem("data");
+                    var getdata1 = JSON.parse(getdata1);
+                    for (let i = 0; i < getdata1.id.length; i++) {
+                        if (getdata1.id[i] == n) {
+                            do {
+                                var flag3 = true;
+                                var ch = parseInt(
+                                    prompt(
+                                        "Enter what you want to update\n1.Name\n2.Number\n3.Email\n4.Password\n5.Price\n6.Quantity\n7.GST\n8.Status\n9.Exit"
+                                    )
+                                );
+                                if (ch == 1) {
+                                    do {
+                                        newnam = prompt("Enter new name");
+                                    } while (newnam.length < 3);
+                                    getdata1.nam[i] = newnam;
+                                    // flag=false
+                                } else if (ch == 2) {
+                                    do {
+                                        var flag = true;
+                                        newnum = prompt("Enter new number");
+                                        var flag2 = true;
+                                        for (let i = 0; i < getdata1.number.length; i++) {
+                                            if (getdata1.number[i] == newnum) {
+                                                flag2 = false;
+                                                // prompt("Enter another number.")
+                                            }
+                                        }
+                                        if (flag2 && newnum.length == 10) {
+                                            flag = false;
+                                        }
+                                    } while (flag);
+                                    getdata1.number[i] = newnum;
+                                    // flag=false
+                                } else if (ch == 3) {
+                                    do {
+                                        var flag = true;
+                                        newemil = prompt("enter new email");
+                                        var validRegex =
+                                            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                                        var flag2 = true;
+                                        for (let i = 0; i < getdata1.email.length; i++) {
+                                            if (getdata1.email[i] == newemil) {
+                                                flag2 = false;
+                                            }
+                                        }
+                                        if (flag2 && newemil.match(validRegex)) {
+                                            flag = false;
+                                        }
+                                    } while (flag);
+                                    getdata1.email[i] = newemil;
+                                    // flag=false
+                                } else if (ch == 4) {
+                                    do {
+                                        var passw = /^[A-Za-z]\w{7,14}$/;
+                                        newpass = prompt("enter new password");
+                                    } while (newpass.match(passw));
+                                    getdata1.password[i] = newpass;
+                                    // flag=false
+                                } else if (ch == 5) {
+                                    newprice = parseInt(prompt("enter new price"));
+                                    getdata1.price[i] = newprice;
+                                    var newst = getdata1.price[i] * getdata1.quantity[i];
+                                    getdata1.subtotal[i] = newst;
+                                    var newgstAmount =
+                                        (getdata1.subtotal[i] * getdata1.gst[i]) / 100;
+                                    var newgt = getdata1.subtotal[i] + newgstAmount;
+                                    getdata1.grandtotal[i] = newgt;
+                                } else if (ch == 6) {
+                                    newquantity = parseInt(prompt("enter new quantity"));
+                                    getdata1.quantity[i] = newquantity;
+                                    var newst = getdata1.price[i] * getdata1.quantity[i];
+                                    getdata1.subtotal[i] = newst;
+                                    var newgstAmount =
+                                        (getdata1.subtotal[i] * getdata1.gst[i]) / 100;
+                                    var newgt = getdata1.subtotal[i] + newgstAmount;
+                                    getdata1.grandtotal[i] = newgt;
+                                } else if (ch == 7) {
+                                    newgst = parseInt(prompt("enter new gst"));
+                                    getdata1.gst[i] = newgst;
+                                    var newgstAmount = (getdata1.subtotal[i] * newgst) / 100;
+                                    var newgt = getdata1.subtotal[i] + newgstAmount;
+                                    getdata1.grandtotal[i] = newgt;
+                                } else if (ch == 8) {
+                                    newstat = prompt("enter new stat");
+                                    getdata1.stat[i] = newstat;
+                                } else if (ch == 9) {
+                                    flag3 = false;
+                                } else {
+                                    alert("enter valid number");
+                                }
+                            } while (flag3);
+                        }
+                    }
+                }
+                localStorage.setItem("data", JSON.stringify(getdata1));
+                break;
+            case 4:
+                do {
+                    var flag4 = true;
+                    if (localStorage.getItem("data") == null) {
+                        alert("Pehla insert karo.");
+                        flag4 = false;
+                    } else {
+                        var getdata2 = localStorage.getItem("data");
+                        var getdata2 = JSON.parse(getdata2);
+                        var s = parseInt(
+                            prompt(
+                                "Senathi search karvu che?\n1.ID\n2.Name\n3.Number\n4.Exit"
+                            )
+                        );
+                        if (s == 1) {
+                            var id4 = parseInt(prompt("Enter id"));
+                            for (let i = 0; i < getdata2.id.length; i++) {
+                                if (getdata2.id[i] == id4) {
+                                    alert("hui");
+                                    var view4 = "";
+                                    // for(let i=0;i<getdata2.id.length;i++){
+                                    view4 =
+                                        view4 +
+                                        getdata2.id[i] +
+                                        "-" +
+                                        getdata2.nam[i] +
+                                        "-" +
+                                        getdata2.number[i] +
+                                        "-" +
+                                        getdata2.email[i] +
+                                        "-" +
+                                        getdata2.password[i] +
+                                        "-" +
+                                        getdata2.price[i] +
+                                        "-" +
+                                        getdata2.quantity[i] +
+                                        "-" +
+                                        getdata2.subtotal[i] +
+                                        "-" +
+                                        getdata2.gst[i] +
+                                        "-" +
+                                        getdata2.grandtotal[i] +
+                                        "-" +
+                                        getdata2.stat[i] +
+                                        "\n";
+                                    // }
+                                    alert(view4);
+                                }
+                            }
+                        } else if (s == 2) {
+                            var nam4 = prompt("enter name");
+                            for (let i = 0; i < getdata2.nam.length; i++) {
+                                if (getdata2.nam[i] == nam4) {
+                                    var view5 = "";
+                                    // for(let i=0;i<getdata2.nam.length;i++){
+                                    view5 =
+                                        view5 +
+                                        getdata2.id[i] +
+                                        "-" +
+                                        getdata2.nam[i] +
+                                        "-" +
+                                        getdata2.number[i] +
+                                        "-" +
+                                        getdata2.email[i] +
+                                        "-" +
+                                        getdata2.password[i] +
+                                        "-" +
+                                        getdata2.price[i] +
+                                        "-" +
+                                        getdata2.quantity[i] +
+                                        "-" +
+                                        getdata2.subtotal[i] +
+                                        "-" +
+                                        getdata2.gst[i] +
+                                        "-" +
+                                        getdata2.grandtotal[i] +
+                                        "-" +
+                                        getdata2.stat[i] +
+                                        "\n";
+                                    // }
+                                    alert(view5);
+                                }
+                            }
+                        } else if (s == 3) {
+                            var num4 = prompt("enter number");
+                            for (let i = 0; i < getdata2.number.length; i++) {
+                                if (getdata2.number[i] == num4) {
+                                    var view6 = "";
+                                    // for(let i=0;i<getdata2.number.length;i++){
+                                    view6 =
+                                        view6 +
+                                        getdata2.id[i] +
+                                        "-" +
+                                        getdata2.nam[i] +
+                                        "-" +
+                                        getdata2.number[i] +
+                                        "-" +
+                                        getdata2.email[i] +
+                                        "-" +
+                                        getdata2.password[i] +
+                                        "-" +
+                                        getdata2.price[i] +
+                                        "-" +
+                                        getdata2.quantity[i] +
+                                        "-" +
+                                        getdata2.subtotal[i] +
+                                        "-" +
+                                        getdata2.gst[i] +
+                                        "-" +
+                                        getdata2.grandtotal[i] +
+                                        "-" +
+                                        getdata2.stat[i] +
+                                        "\n";
+                                    // }
+                                    alert(view6);
+                                }
+                            }
+                        } else if (s == 4) {
+                            flag4 = false;
+                        } else {
+                            alert("enter valid number");
+                        }
+                    }
+                } while (flag4);
+                break;
+            case 5:
+                do {
+                    var flag5 = true;
+                    if (localStorage.getItem("data") == null) {
+                        alert("insert karo pehla");
+                    } else {
+                        var getdata3 = localStorage.getItem("data");
+                        var getdata3 = JSON.parse(getdata3);
+                        var id5 = parseInt(prompt("enter id which you want to delete"));
+                        for (let i = 0; i < getdata3.id.length; i++) {
+                            if (getdata3.id[i] == id5) {
+                                getdata3.id.splice(i, 1);
+                                getdata3.nam.splice(i, 1);
+                                getdata3.number.splice(i, 1);
+                                getdata3.email.splice(i, 1);
+                                getdata3.password.splice(i, 1);
+                                getdata3.price.splice(i, 1);
+                                getdata3.quantity.splice(i, 1);
+                                getdata3.subtotal.splice(i, 1);
+                                getdata3.gst.splice(i, 1);
+                                getdata3.grandtotal.splice(i, 1);
+                                getdata3.stat.splice(i, 1);
+                                flag5 = false;
+                            }
+                        }
+                    }
+                } while (flag5);
+                localStorage.setItem("data", JSON.stringify(getdata3));
+                break;
+            case 6:
+                mainFlag = false;
+                break;
+            default:
+                alert("enter valid number");
+                break;
+        }
+    } while (mainFlag);
+</script>
