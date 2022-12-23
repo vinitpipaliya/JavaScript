@@ -1,0 +1,736 @@
+<script>
+    var mainflag = true;
+    var counter = 0
+    var cc = 0
+    var c = 0
+    var bookingc = 0
+
+    if (localStorage.getItem('eventdata') == null) {
+        var userlist = []
+        var eventlist = [];
+        var adminlist = [];
+        var bookinglist = [];
+        var data = { user: userlist, event: eventlist, admin: adminlist, booking: bookinglist }
+    }
+    else {
+        var data = localStorage.getItem('eventdata')
+        data = JSON.parse(data)
+        // cc = data.event.slice(-1).pop().id
+        // counter = data.user.slice(-1).pop().id
+        // c = data.booking.slice(-1).pop().id
+        cc = data.event.length
+        counter = data.user.length;
+        c = data.booking.length
+        // bookingc = data.booking.slice(-1).pop().bookinglist.length;
+    }
+    //update
+    // if (localStorage.getItem('eventdata', 'event') != null) {
+    //     cc = data.event.length
+    // }
+    // if (localStorage.getItem('eventdata', 'user') != null) {
+    //     counter = data.user.length;
+    // }
+    // if (localStorage.getItem('eventdata', 'booking') != null) {
+    //     c = data.booking.length
+    // }
+    do {
+        var mainchoice = parseInt(prompt("Enter number\n1.User side\n2.Admin Side\n3.Exit"))
+        switch (mainchoice) {
+            case 1:
+                var flag = true
+                do {
+                    var choice1 = parseInt(prompt("Enter number\n1.Register\n2.Login\n3.Visitor\n4.Exit"))
+                    switch (choice1) {
+                        case 1:
+                            do {
+                                var nm = prompt("Enter your name")
+                                if (nm.length < 3) {
+                                    alert("Please enter greater than 3 character")
+                                }
+                            } while (nm.length < 3)
+                            do {
+                                var flag1 = true
+                                var num = prompt("Enter your Contact number")
+                                var flag2 = true;
+                                for (let i in data.user) {
+                                    if (data.user[i].number == num) {
+                                        alert("This number is already register. Please insert another number.")
+                                        flag2 = false
+                                        break;
+                                    }
+                                }
+
+                                if (flag2 && num.length == 10) {
+                                    flag1 = false
+                                }
+                            } while (flag1)
+                            do {
+                                var age = prompt("Enter your age")
+                                Adult:
+                                if (age < 18 || age > 100) {
+                                    if (age < 18) {
+                                        alert("You are under 18. You cant register.")
+                                        break Adult;
+                                    }
+                                    alert("Please enter proper age")
+                                }
+                            } while (age < 18 || age > 100)
+                            var bd = prompt("Enter your birth date")
+                            do {
+                                var pass = prompt("Enter Password")
+                                if (pass.length < 6) {
+                                    alert("Enter Greater than 6 character")
+                                }
+                            } while (pass.length < 6)
+                            alert("Registration Successfull")
+                            var tmp = {}
+                            tmp.id = ++counter;
+                            tmp.name = nm;
+                            tmp.number = num;
+                            tmp.age = age
+                            tmp.bd = bd;
+                            tmp.status = 0;
+                            tmp.password = pass
+                            // tmp.booking = []
+                            tmp.ivestedmoney = 0
+                            data.user.push(tmp)
+                            localStorage.setItem('eventdata', JSON.stringify(data))
+                            break;
+                        case 2:
+                            loop1:
+                            do {
+                                var flag1 = true;
+                                var flag6 = true;
+                                var nm = prompt("Enter your number")
+                                for (let i in data.user) {
+                                    if (data.user[i].number == nm) {
+                                        flag6 = false;
+                                        do {
+                                            var flag5 = true
+                                            var flag2 = true;
+                                            var pass = prompt("Enter password")
+                                            if (data.user[i].password == pass) {
+                                                flag5 = false
+                                                do {
+                                                    var flag3 = true;
+                                                    var choice2 = parseInt(prompt("Enter numbre\n1.All Events\n2.Event Booking\n3.History\n4.Cancel Booking\n5.Invented Money\n6.Exit"))
+                                                    switch (choice2) {
+                                                        case 1:
+                                                            var view = ''
+                                                            for (let i in data.event) {
+                                                                if (data.event[i].status == 0) {
+                                                                    view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' \n '
+                                                                }
+                                                            }
+                                                            alert(view)
+                                                            break;
+                                                        case 2:
+                                                            age:
+                                                            do {
+                                                                var flag7 = true;
+                                                                var eveid = prompt("Enter event id you want to booking")
+                                                                for (let j in data.event) {
+                                                                    var flag4 = true
+                                                                    if (data.event[j].id == eveid) {
+                                                                        flag4 = false;
+                                                                        if (data.event[j].status == 0) {
+                                                                            var sit = parseInt(prompt("Enter how many seat you want in this event?"))
+                                                                            var flag8 = true;
+                                                                            if (sit > 0) {
+                                                                                flag8 = false
+                                                                                var flag9 = true
+                                                                                if (data.event[j].capacity >= sit) {
+                                                                                    flag9 = false
+                                                                                    var tmp = {};
+                                                                                    tmp.bookinglist = []
+                                                                                    var a = 0;
+                                                                                    for (let k = 1; k <= sit; k++) {
+                                                                                        var booktmp = {};
+                                                                                        var bname = prompt("Enter name for " + k + " person")
+                                                                                        var bage = prompt("Enter age " + k + " person")
+                                                                                        booktmp.bkid = ++bookingc;
+                                                                                        booktmp.bname = bname;
+                                                                                        booktmp.bage = bage;
+                                                                                        tmp.bookinglist.push(booktmp)
+                                                                                        tmp.status = 0;
+                                                                                        a++;
+                                                                                    }
+                                                                                    tmp.id = ++c;
+                                                                                    tmp.status = 0
+                                                                                    tmp.price = a * data.event[j].type;
+                                                                                    tmp.eveid = data.event[j].id
+                                                                                    tmp.userid = data.user[i].id;
+                                                                                    data.user[i].ivestedmoney = data.user[i].ivestedmoney + tmp.price;
+                                                                                    data.booking.push(tmp)
+                                                                                    data.event[j].capacity = data.event[j].capacity - sit;
+                                                                                    localStorage.setItem('eventdata', JSON.stringify(data))
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (flag4) {
+                                                                    var ch = parseInt(prompt("Event id is Wrong. Do you want to continue or exit.\n1.Continue\n2.Exit"))
+                                                                    if (ch == 2) {
+                                                                        flag7 = false;
+                                                                        break age;
+                                                                    }
+                                                                }
+                                                                if (flag8) {
+                                                                    var ch1 = parseInt(prompt("Please enter valid seat. Do you want to continue or exit.\n1.Continue\n2.Exit"))
+                                                                    if (ch1 == 2) {
+                                                                        flag7 = false;
+                                                                        break age;
+                                                                    }
+                                                                }
+                                                                if (flag9) {
+                                                                    var ch2 = parseInt(prompt("Enter seat is not available. Do you want to continue or exit.\n1.Continue\n2.Exit"))
+                                                                    if (ch2 == 2) {
+                                                                        flag7 = false;
+                                                                        break age;
+                                                                    }
+                                                                }
+                                                                flag7 = false
+                                                            } while (flag7)
+                                                            if (sit > 0) {
+                                                                alert("You confirmed " + sit + " seat.")
+                                                            }
+                                                            localStorage.setItem('eventdata', JSON.stringify(data))
+                                                            break;
+                                                        case 3:
+                                                            var view = '';
+                                                            for (let j in data.booking) {
+                                                                for (let k in data.booking[j].bookinglist)
+                                                                    if (data.booking[j].userid == data.user[i].id && data.booking[j].status == 0) {
+                                                                        view = view + data.booking[j].bookinglist[k].bname + '-' + data.booking[j].bookinglist[k].bage + '-' + data.booking[j].id + '-' + data.booking[j].eveid + '-' + data.booking[j].userid + '-' + data.booking[j].bookinglist + '\n'
+                                                                    }
+                                                            }
+                                                            alert(view)
+                                                            break;
+                                                        case 4:
+                                                            var flag10 = true;
+                                                            var canid = prompt("Enter event id you want to cancel booking?")
+                                                            for (let j in data.booking) {
+                                                                for (let k in data.event) {
+                                                                    if (data.booking[j].id == canid) {
+                                                                        flag10 = false;
+                                                                        data.event[k].capacity = data.event[k].capacity + data.booking[j].sit
+                                                                        data.user[i].booking[j].status = 1;
+                                                                        alert("Your booking is successfully cancelled!!")
+                                                                        // data.event[k].capacity = data.event[k].capacity + data.user[i].booking[0].sit;
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            // for (let j in data.event) {
+                                                            //     for (let k in data.booking) {
+                                                            //         for (let l in data.user[i].booking) {
+                                                            //             if (data.event[j].eventName == data.user[i].booking[l].eventname && data.user[i].booking[l].eventname == canname) {
+                                                            //                 data.event[j].capacity = data.event[j].capacity + data.user[i].booking[l].sit
+                                                            //             }
+                                                            //         }
+                                                            //     }
+                                                            // }
+                                                            if (flag10) {
+                                                                alert("Event id is incorrect")
+                                                            }
+                                                            localStorage.setItem('eventdata', JSON.stringify(data))
+                                                            break;
+                                                        case 5:
+                                                            var view = '';
+                                                            for (let j in data.booking) {
+                                                                if (data.booking[j].status == 0 && data.booking[j].userid == data.user[i].id) {
+                                                                    view = view + data.user[i].id + ' - ' + data.user[i].name + ' - ' + data.booking[j].id + ' - ' + data.user[i].ivestedmoney + ' \n'
+                                                                }
+                                                            }
+                                                            alert(view)
+                                                            break;
+                                                        case 6:
+                                                            flag3 = false;
+                                                            flag1 = false;
+                                                            flag2 = false;
+                                                            break loop1;
+                                                        default:
+                                                            alert("Invalid number")
+                                                            break;
+                                                    }
+                                                } while (flag3)
+                                            }
+                                            if (flag5) {
+                                                var ch = parseInt(prompt("Wrong Password. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                                if (ch == 2) {
+                                                    flag1 = false
+                                                }
+                                            }
+                                        } while (flag2)
+                                    }
+                                }
+                                if (flag6) {
+                                    var ch1 = parseInt(prompt("Wrong Number. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                    if (ch1 == 2) {
+                                        flag1 = false;
+                                    }
+                                }
+                            } while (flag1)
+                            break;
+                        case 3:
+                            var view = ''
+                            for (let i in data.event) {
+                                if (data.event[i].status == 0) {
+                                    view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' \n '
+                                }
+                            }
+                            alert(view)
+                            break;
+                        case 4:
+                            flag = false
+                            break;
+                        default:
+                            alert("Back to main menu")
+                            break;
+                    }
+                } while (flag)
+                break;
+            case 2:
+                mloop:
+                do {
+                    var flag = true;
+                    var choice1 = parseInt(prompt("Enter number\n1.Super admin\n2.Manager\n3.Employee\n4.Exit"))
+                    switch (choice1) {
+                        case 1:
+                            saloop:
+                            do {
+                                var flag1 = true
+                                var unam = prompt("Enter name")
+                                if (unam == "superadmin") {
+                                    do {
+                                        var flag2 = true;
+                                        var pass = prompt("Enter password")
+                                        if (pass == "superadmin") {
+                                            do {
+                                                var flag3 = true;
+                                                var choice2 = parseInt(prompt("Enter number\n1.Add Event\n2.View Event\n3.Update Event\n4.Delete Event\n5.History\n6.Exit"))
+                                                switch (choice2) {
+                                                    case 1:
+                                                        var eventname = prompt("Enter event name");
+                                                        var date = prompt("Enter event date")
+                                                        var venue = prompt("Enter event location")
+                                                        var capacity = parseInt(prompt("Enter event capacity"))
+                                                        var eventtype = parseInt(prompt("Enter event fees"))
+                                                        var tmp = {}
+                                                        tmp.id = ++cc;
+                                                        tmp.eventName = eventname;
+                                                        tmp.date = date;
+                                                        tmp.venue = venue;
+                                                        tmp.capacity = capacity;
+                                                        tmp.type = eventtype
+                                                        tmp.status = 0;
+                                                        tmp.creator = "Super admin"
+                                                        // tmp.booking = [];
+                                                        data.event.push(tmp)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        alert("Event created Successfully")
+                                                        break;
+                                                    case 2:
+                                                        var view = ''
+                                                        for (let i in data.event) {
+                                                            if (data.event[i].status == 0) {
+                                                                view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' - ' + data.event[i].status + ' - ' + data.event[i].creator + ' - ' + data.event[i].booking + ' \n '
+                                                            }
+                                                        }
+                                                        alert(view)
+                                                        break;
+                                                    case 3:
+                                                        loop1:
+                                                        do {
+                                                            var flag4 = true
+                                                            var flag5 = true
+                                                            var flag6 = true
+                                                            var eveid = parseInt(prompt("Enter event id you want to update"))
+                                                            for (let i in data.event) {
+                                                                if (data.event[i].id == eveid) {
+                                                                    flag5 = false
+                                                                    if (data.event[i].status == 0) {
+                                                                        flag6 = false
+                                                                        do {
+                                                                            var flag7 = true;
+                                                                            var choice3 = parseInt(prompt("What you want to update?\n1.Event Name\n2.Date\n3.Location\n4.Capacity\n5.Type\n6.Exit"))
+                                                                            switch (choice3) {
+                                                                                case 1:
+                                                                                    var newevnam = prompt("Event new name")
+                                                                                    data.event[i].eventName = newevnam
+                                                                                    break;
+                                                                                case 2:
+                                                                                    var newdate = prompt("Event new date")
+                                                                                    data.event[i].date = newdate
+                                                                                    break;
+                                                                                case 3:
+                                                                                    var newlocation = prompt("Event new location")
+                                                                                    data.event[i].location = newlocation
+                                                                                    break;
+                                                                                case 4:
+                                                                                    var newcapacity = parseInt(prompt("Enter new capacity"))
+                                                                                    data.event[i].capacity = newcapacity
+                                                                                    break;
+                                                                                case 5:
+                                                                                    var newtype = prompt("Enter new fees")
+                                                                                    data.event[i].type = newtype
+                                                                                    break;
+                                                                                case 6:
+                                                                                    flag4 = false
+                                                                                    break loop1;
+                                                                                default:
+                                                                                    alert("Invalid Choice")
+                                                                                    break;
+                                                                            }
+                                                                        } while (flag7)
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (flag5) {
+                                                                alert("Which event id you entered is not valid.")
+                                                                break loop1;
+                                                            }
+                                                            if (flag6) {
+                                                                alert("Which event id you entered is deleted.")
+                                                                break loop1;
+                                                            }
+                                                            var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                                            if (ch == 2) {
+                                                                flag4 = false
+                                                            }
+
+                                                        } while (flag4)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        break;
+                                                    case 4:
+                                                        loop1:
+                                                        do {
+                                                            var flag4 = true
+                                                            var flag5 = true
+                                                            var flag6 = true
+                                                            var eveid = parseInt(prompt("Enter event id you want to Delete"))
+                                                            for (let i in data.event) {
+                                                                if (data.event[i].id == eveid) {
+                                                                    flag5 = false
+                                                                    if (data.event[i].status == 0) {
+                                                                        flag6 = false
+                                                                        data.event[i].status = 1
+                                                                        flag4 = false
+                                                                        alert("Event is successfully deleted.")
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (flag5) {
+                                                                alert("Which event id you entered is not valid.")
+                                                                break loop1;
+                                                            }
+                                                            if (flag6) {
+                                                                alert("Which event id you entered is already deleted.")
+                                                                break loop1;
+                                                            }
+                                                            var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                                            if (ch == 2) {
+                                                                flag4 = false
+                                                            }
+                                                        } while (flag4)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        break;
+                                                    case 5:
+                                                        var view = ''
+                                                        for (let i in data.event) {
+                                                            view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' - ' + data.event[i].status + ' - ' + data.event[i].creator + ' - ' + data.event[i].booking + ' \n '
+                                                        }
+                                                        alert(view)
+                                                        break;
+                                                    case 6:
+                                                        flag3 = false;
+                                                        break saloop;
+                                                    default:
+                                                        alert("Invalid choice")
+                                                        break;
+                                                }
+                                            } while (flag3)
+                                        }
+                                        var ch1 = parseInt(prompt("Wrong Password. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                        if (ch1 == 2) {
+                                            break mloop;
+                                        }
+                                    } while (flag2)
+                                }
+                                var ch2 = parseInt(prompt("Wrong username. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                if (ch2 == 2) {
+                                    break mloop;
+                                }
+                            } while (flag1)
+                            break;
+                        case 2:
+                            aloop:
+                            do {
+                                var flag1 = true
+                                var unam = prompt("Enter name")
+                                if (unam == "admin") {
+                                    do {
+                                        var flag2 = true;
+                                        var pass = prompt("Enter password")
+                                        if (pass == "admin") {
+                                            do {
+                                                var flag3 = true;
+                                                var choice2 = parseInt(prompt("Enter number\n1.Add Event\n2.View Event\n3.Update Event\n4.Delete Event\n5.History\n6.Exit"))
+                                                switch (choice2) {
+                                                    case 1:
+                                                        var eventname = prompt("Enter event name");
+                                                        var date = prompt("Enter event date")
+                                                        var venue = prompt("Enter event location")
+                                                        var capacity = parseInt(prompt("Enter event capacity"))
+                                                        var event_type = parseInt(prompt("Enter event fees"))
+                                                        var tmp = {}
+                                                        tmp.id = ++cc;
+                                                        tmp.eventName = eventname;
+                                                        tmp.date = date;
+                                                        tmp.venue = venue;
+                                                        tmp.capacity = capacity;
+                                                        tmp.type = event_type
+                                                        tmp.status = 0;
+                                                        tmp.creator = "admin"
+                                                        // tmp.booking = [];
+                                                        data.event.push(tmp)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        alert("Event created Successfully")
+                                                        break;
+                                                    case 2:
+                                                        var view = ''
+                                                        for (let i in data.event) {
+                                                            if (data.event[i].status == 0) {
+                                                                view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' - ' + data.event[i].status + ' - ' + data.event[i].creator + ' - ' + data.event[i].booking + ' \n '
+                                                            }
+                                                        }
+                                                        alert(view)
+                                                        break;
+                                                    case 3:
+                                                        loop1:
+                                                        do {
+                                                            var flag4 = true
+                                                            var flag5 = true
+                                                            var flag6 = true
+                                                            var flag7 = true
+                                                            var eveid = parseInt(prompt("Enter event id you want to update"))
+                                                            for (let i in data.event) {
+                                                                if (data.event[i].id == eveid) {
+                                                                    flag5 = false
+                                                                    if (data.event[i].status == 0) {
+                                                                        flag6 = false
+                                                                        if (data.event[i].creator == "admin" || data.event[i].creator == "employee") {
+                                                                            flag7 = false;
+                                                                            do {
+                                                                                var flag8 = true;
+                                                                                var choice3 = parseInt(prompt("What you want to update?\n1.Event Name\n2.Date\n3.Location\n4.Capacity\n5.Type\n6.Exit"))
+                                                                                switch (choice3) {
+                                                                                    case 1:
+                                                                                        var newevnam = promot("Event new name")
+                                                                                        data.event[i].eventname = newevnam
+                                                                                        break;
+                                                                                    case 2:
+                                                                                        var newdate = prompt("Event new date")
+                                                                                        data.event[i].date = newdate
+                                                                                        break;
+                                                                                    case 3:
+                                                                                        var newlocation = prompt("Event new location")
+                                                                                        data.event[i].location = newlocation
+                                                                                        break;
+                                                                                    case 4:
+                                                                                        var newcapacity = parseInt(prompt("Enter new capacity"))
+                                                                                        data.event[i].capacity = newcapacity
+                                                                                        break;
+                                                                                    case 5:
+                                                                                        var newtype = prompt("Enter new fees")
+                                                                                        data.event[i].type = newtype
+                                                                                        break;
+                                                                                    case 6:
+                                                                                        flag4 = false
+                                                                                        flag8 = false;;
+                                                                                        break loop1;
+                                                                                    default:
+                                                                                        alert("Invalid Choice")
+                                                                                        break;
+                                                                                }
+                                                                            } while (flag8)
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (flag5) {
+                                                                alert("Which event id you entered is not valid.")
+                                                                break loop1;
+                                                            }
+                                                            if (flag6) {
+                                                                alert("Which event id you entered is deleted.")
+                                                                break loop1;
+                                                            }
+                                                            if (flag7) {
+                                                                alert("Which event id you entered is created by super admin you cant update it.")
+                                                                break loop1;
+                                                            }
+                                                            var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                                            if (ch == 2) {
+                                                                flag4 = false
+                                                            }
+
+                                                        } while (flag4)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        break;
+                                                    case 4:
+                                                        loop1:
+                                                        do {
+                                                            var flag4 = true
+                                                            var flag5 = true
+                                                            var flag6 = true
+                                                            var flag7 = true;
+                                                            var eveid = parseInt(prompt("Enter event id you want to Delete"))
+                                                            for (let i in data.event) {
+                                                                if (data.event[i].id == eveid) {
+                                                                    flag5 = false
+                                                                    if (data.event[i].status == 0) {
+                                                                        flag6 = false
+                                                                        if (data.event[i].creator == "admin" && data.event[i].creator == "employee") {
+                                                                            flag7 = false
+                                                                            data.event[i].status = 1
+                                                                            flag4 = false
+                                                                            alert("Event is successfully deleted.")
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (flag5) {
+                                                                alert("Which event id you entered is not valid.")
+                                                                break loop1;
+                                                            }
+                                                            if (flag6) {
+                                                                alert("Which event id you entered is already deleted.")
+                                                                break loop1;
+                                                            }
+                                                            if (flag7) {
+                                                                alert("Which event id you entered is created by super admin you cant delete it.")
+                                                                break loop1;
+                                                            }
+                                                            var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                                            if (ch == 2) {
+                                                                flag4 = false
+                                                            }
+                                                        } while (flag4)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        break;
+                                                    case 5:
+                                                        var view = ''
+                                                        for (let i in data.event) {
+                                                            view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' - ' + data.event[i].status + ' - ' + data.event[i].creator + ' - ' + data.event[i].booking + ' \n '
+                                                        }
+                                                        alert(view)
+                                                        break;
+                                                    case 6:
+                                                        flag3 = false;
+                                                        break aloop;
+                                                    default:
+                                                        alert("Invalid choice")
+                                                        break;
+                                                }
+                                            } while (flag3)
+                                        }
+                                        var ch1 = parseInt(prompt("Wrong Password. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                        if (ch1 == 2) {
+                                            break aloop;
+                                        }
+                                    } while (flag2)
+                                }
+                                var ch2 = parseInt(prompt("Wrong username. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                if (ch2 == 2) {
+                                    break aloop;
+                                }
+                            } while (flag1)
+                            break;
+                        case 3:
+                            loop1:
+                            do {
+                                var flag1 = true
+                                var unam = prompt("Enter name")
+                                if (unam == "employee") {
+                                    do {
+                                        var flag2 = true;
+                                        var pass = prompt("Enter password")
+                                        if (pass == "employee") {
+                                            do {
+                                                var flag3 = true;
+                                                var choice2 = parseInt(prompt("Enter number\n1.Add Event\n2.View Event\n3.Exit"))
+                                                switch (choice2) {
+                                                    case 1:
+                                                        var eventname = prompt("Enter event name");
+                                                        var date = prompt("Enter event date")
+                                                        var venue = prompt("Enter event location")
+                                                        var capacity = parseInt(prompt("Enter event capacity"))
+                                                        var event_type = parseInt(prompt("Enter event fees"))
+                                                        var tmp = {}
+                                                        tmp.id = ++cc;
+                                                        tmp.eventName = eventname;
+                                                        tmp.date = date;
+                                                        tmp.venue = venue;
+                                                        tmp.capacity = capacity;
+                                                        tmp.type = event_type
+                                                        tmp.status = 0;
+                                                        tmp.creator = "employee"
+                                                        // tmp.booking = [];
+                                                        data.event.push(tmp)
+                                                        localStorage.setItem('eventdata', JSON.stringify(data))
+                                                        alert("Event created Successfully")
+                                                        break;
+                                                    case 2:
+                                                        var view = ''
+                                                        for (let i in data.event) {
+                                                            if (data.event[i].status == 0) {
+                                                                view = view + data.event[i].id + ' - ' + data.event[i].eventName + ' - ' + data.event[i].date + ' - ' + data.event[i].venue + ' - ' + data.event[i].capacity + ' - ' + data.event[i].type + ' - ' + data.event[i].status + ' - ' + data.event[i].creator + ' - ' + data.event[i].booking + ' \n '
+                                                            }
+                                                        }
+                                                        alert(view)
+                                                        break;
+                                                    case 3:
+                                                        flag3 = false;
+                                                        break loop1;
+                                                    default:
+                                                        alert("Invalid choice")
+                                                        break;
+                                                }
+                                            } while (flag3)
+                                        }
+                                        var ch1 = parseInt(prompt("Wrong Password. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                        if (ch1 == 2) {
+                                            break loop1;
+                                        }
+                                    } while (flag2)
+                                }
+                                var ch2 = parseInt(prompt("Wrong username. Do you want to continue or exit?\n1.Continue\n2.Exit"))
+                                if (ch2 == 2) {
+                                    break loop1;
+                                }
+                            } while (flag1)
+                            break;
+                        case 4:
+                            flag = false;
+                            break;
+
+                        default:
+                            break;
+                    }
+                } while (flag);
+                break;
+            case 3:
+                mainflag = false
+                alert("Thank You for visit.")
+                break;
+            default:
+                alert("Invalid Choice")
+                break;
+        }
+    } while (mainflag)
+    // alert("Thank You for visit.")
+
+</script>
