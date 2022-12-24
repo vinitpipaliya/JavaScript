@@ -1,0 +1,309 @@
+<script>
+    var numberReg = /^\d+$/;
+    var counter = 0
+
+    function checkInput(msg, reg) {
+        do {
+            var check = prompt(msg)
+            if (!check.match(reg)) {
+                alert("Invalid Input!!!")
+                var ch = ContinueOrExit()
+            }
+            else {
+                var ch = false;
+            }
+        } while (ch)
+        return check;
+    }
+
+    function ContinueOrExit() {
+        var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+        if (ch == 2) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function checkLength(str, len) {
+        do {
+            var nm = prompt("Enter your " + str + " :")
+            if (nm.length < len) {
+                alert("Please enter greater than " + len + " character.")
+                var ch = ContinueOrExit()
+            }
+            else {
+                var ch = false;
+            }
+
+        } while (ch)
+        return nm
+    }
+
+    function checkRegister(data, number) {
+        var nm = number
+        for (let i in data) {
+            if (data[i] == nm) {
+                alert("This number is already Register.")
+                var ch = ContinueOrExit();
+                return ch;
+            }
+        }
+        return nm;
+    }
+
+    function checkAge() {
+        var agein = "Enter Your age:"
+        do {
+            var age = parseInt(checkInput(agein, numberReg))
+            if (age < 18 || age > 120) {
+                if (age < 18) {
+                    alert("You are under 18 you cannot register.")
+                    var ch = ContinueOrExit()
+                    if (ch == true) { }
+                    else {
+                        return ch;
+                    }
+                }
+                else {
+                    alert("Please enter proper age.")
+                    var ch1 = ContinueOrExit()
+                    if (ch1 == true) { }
+                    else {
+                        return ch1;
+                    }
+                }
+            }
+        } while (age < 18 || age > 120)
+        return age;
+    }
+
+    function Register(data) {
+        var id = ++counter;
+        var name = checkLength('Name', 3)
+        var numb = checkLength('Number', 10)
+        var number = checkRegister(data.user, numb)
+        if (number == false) {
+            return data;
+        }
+        var age = checkAge()
+        if (age == false) {
+            return data;
+        }
+        var password = checkLength('Password', 6)
+        var status = 0;
+        var account = 0;
+        var InvestedMoney = 0;
+        alert("Registration Successfully Completed!!!!")
+        var tmp = { id, name, number, age, password, status, account, InvestedMoney }
+        data.user.push(tmp)
+        localStorage.setItem('function', JSON.stringify(data))
+        return data;
+    }
+
+    function checkLogin(logindata, data) {
+        do {
+            var num = prompt("Enter your " + logindata + ":")
+            var flag = true;
+            for (let i in data) {
+                if (num == data[i][logindata]) {
+                    return { num, i, data }
+                }
+            }
+            alert(logindata + " is not Registered")
+            var ch = ContinueOrExit();
+            if (ch == true) { }
+            else {
+                return ch;
+            }
+        } while (flag)
+    }
+
+    function checkLoginStatus(i, data) {
+        do {
+            var flag = true;
+            if (data[i].account == 0) {
+                alert("Your account is not approved.")
+                var ch = ContinueOrExit();
+                if (ch == true) {
+
+                }
+                else {
+                    return ch;
+                }
+            }
+            else {
+                return data;
+            }
+        } while (flag)
+    }
+
+    function displayProfile(data, j) {
+        var dis = ''
+        for (let i of data) {
+            var oo = 0;
+            if (i.status == 0 && i.id == data[j].id) {
+                oo = -1
+                dis = dis + "Id: " + i.id + '\nName: ' + i.name + '\nNumber: ' + i.number + '\nAge: ' + i.age + '\nPassword:  ' + i.password + '\nStatus: ' + i.status + '\nInvested Money: ' + i.InvestedMoney + ' \n '
+                alert(dis)
+                return data;
+            }
+        }
+        if (oo == 0) {
+            alert("Your status is pending.")
+        }
+    }
+
+    function displaAllUsers(data) {
+        var dis = ''
+        for (let i of data.user) {
+            dis = dis + "Id: " + i.id + '\nName: ' + i.name + '\nNumber: ' + i.number + '\nAge: ' + i.age + '\nPassword:  ' + i.password + '\nStatus: ' + i.status + '\nInvested Money: ' + i.InvestedMoney + '\nAccount: ' + i.account + ' \n '
+        }
+        if (dis == '') {
+            alert("Currently There are not any users.")
+        }
+        else {
+            alert(dis)
+        }
+        return data;
+    }
+
+    function approveAccount(data) {
+        var userId = "Enter Id you want to approved: "
+        var useId = parseInt(checkInput(userId, numberReg))
+        var found = data.user.find(element => element.id == useId)
+        if (found == undefined) {
+            alert("Id is not found.")
+        }
+        else if (found.account == 0) {
+            found.account = 1;
+            localStorage.setItem('function', JSON.stringify(data))
+            alert("Successfully Approved.")
+        }
+        else {
+            alert("Id is already approved.")
+        }
+        return data;
+    }
+
+    function deleteAccount(data) {
+        var deleteId = "Enter Id you want to delete: "
+        var delId = parseInt(checkInput(deleteId, numberReg))
+        var found = data.user.find(element => element.id == delId)
+        if (found == undefined) {
+            alert("Id is not found.")
+        }
+        else if (found.status == 0) {
+            found.status = 1
+            localStorage.setItem('function', JSON.stringify(data))
+            alert("Successfully Deleted.")
+        }
+        else {
+            alert("Id is already deleted.")
+        }
+        return data;
+    }
+
+    function Login(data) {
+        var { num, i, userdata } = checkLogin("number", data.user);
+        if (num == false) {
+            return data;
+        }
+        var pass = checkLogin("password", data.user);
+        if (pass == false) {
+            return data;
+        }
+        var accountStatus = checkLoginStatus(i, data.user)
+        if (accountStatus == false) {
+            return data;
+        }
+        var view = displayProfile(data.user, i)
+        return data;
+    }
+
+    function adminLogin(data) {
+        var adcho = "Enter number\n1.All Users\n2.Approve Account\n3.Delete Account\n4.Exit"
+        var uname = checkLogin("name", data.admin);
+        if (uname == false) {
+            return data;
+        }
+        var password = checkLogin("password", data.admin);
+        if (password == false) {
+            return data;
+        }
+        do {
+            var flag = true;
+            var adminChoice = parseInt(checkInput(adcho, numberReg))
+            switch (adminChoice) {
+                case 1:
+                    data = displaAllUsers(data)
+                    break;
+                case 2:
+                    data = approveAccount(data)
+                    break;
+                case 3:
+                    data = deleteAccount(data)
+                    break;
+                case 4:
+                    flag = false;
+                    break;
+                default:
+                    break;
+            }
+        } while (flag)
+        return data;
+    }
+
+    function main() {
+        var mainch = "Enter number\n1.User\n2.Admin\n3.Exit"
+        var cho = "Enter number\n1.Register\n2.Login\n3.Exit"
+        if (localStorage.getItem('function') == null) {
+            var userlist = []
+            var adminlist = [{ id: 1, name: "sadmin", password: "sadmin", role: "superadmin", status: 0 }, { id: 2, name: "admin", password: "admin", role: "admin", status: 0 }, { id: 3, name: "employee1", password: "employee1", role: "employee", status: 0 }];
+            var data = { user: userlist, admin: adminlist }
+        }
+        else {
+            var data = localStorage.getItem('function')
+            data = JSON.parse(data)
+            counter = data.user.length;
+        }
+
+        do {
+            var mainFlag = true;
+            var mainChoice = parseInt(checkInput(mainch, numberReg))
+            switch (mainChoice) {
+                case 1:
+                    do {
+                        var flag1 = true
+                        var choice = parseInt(checkInput(cho, numberReg))
+                        switch (choice) {
+                            case 1:
+                                data = Register(data)
+                                break;
+                            case 2:
+                                data = Login(data)
+                                break;
+                            case 3:
+                                flag1 = false;
+                                break;
+                            default:
+                                break;
+                        }
+                    } while (flag1)
+                    break;
+                case 2:
+                    data = adminLogin(data)
+                    break;
+                case 3:
+                    mainFlag = false
+                    break;
+                default:
+                    break;
+            }
+
+        } while (mainFlag)
+
+    }
+    main()
+</script>
