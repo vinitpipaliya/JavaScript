@@ -1,0 +1,755 @@
+<script>
+    var mainch = "Enter number\n1.User\n2.Admin\n3.Exit"
+    var cho = "Enter number\n1.Register\n2.Login\n3.Visitor\n4.Exit"
+    var coe = "Do you want to continue or exit?\n1.Continue\n2.Exit"
+    var choic1 = "Enter numbre\n1.All Events\n2.Event Booking\n3.Booked Event\n4.Cancel Booking\n5.Invented Money\n6.Exit"
+    var agein = "Enter Your age:"
+    var eid = "Enter event id you want to booking"
+    var s = "Enter How many sear you want to booking:"
+    var adch = "Enter number\n1.Super admin\n2.Manager\n3.Employee\n4.Exit"
+    var sach = "Enter number\n1.Add Event\n2.View Event\n3.Update Event\n4.Delete Event\n5.History\n6.Exit"
+    var upeveid = "Enter event id you want to update"
+    var cneveid = "Enter event id you want to cancel"
+    var upevech = "What you want to update?\n1.Event Name\n2.Date\n3.Location\n4.Capacity\n5.Type\n6.Exit"
+    var ech = "Enter number\n1.Add Event\n2.View Event\n3.Exit"
+    var numberReg = /^\d+$/;
+    var counter = 0
+    var cc = 0
+    var c = 0
+    var bookingc = 0
+
+
+
+    function checkInput(msg, reg) {
+        var check = prompt(msg)
+        if (!check.match(reg)) {
+            alert("Invalid Input!!!")
+            var ch = ContinueOrExit()
+            if (ch == false) {
+                return false;
+            }
+            check = checkInput(msg, reg)
+        }
+        return check;
+    }
+
+    function ContinueOrExit() {
+        var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+        if (ch == 2) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function checkLength(str, len) {
+        var nm = prompt("Enter your " + str + " :")
+        if (nm.length < len) {
+            alert("Please enter greater than " + len + " character.")
+            var ch = ContinueOrExit()
+            if (ch == false) {
+                return false;
+            }
+            nm = checkLength(str, len)
+        }
+        return nm
+    }
+
+    function checkRegister(data) {
+        var numb = checkLength('Number', 10)
+        var i = data.findIndex(element => element.number == numb)
+        if (i >= 0) {
+            alert("This number is already Register.")
+            var ch = ContinueOrExit();
+            if (ch == false) {
+                return false;
+            }
+            data = checkRegister(data)
+        }
+        return numb;
+    }
+
+    function checkAge() {
+        var age = parseInt(checkInput(agein, numberReg))
+        if (age < 18 || age > 120) {
+            if (age < 18) {
+                alert("You are under 18 you cannot register.")
+                var ch = ContinueOrExit()
+                if (ch == true) {
+                    age = checkAge()
+                }
+                else {
+                    return ch;
+                }
+            }
+            else {
+                alert("Please enter proper age.")
+                var ch1 = ContinueOrExit()
+                if (ch1 == true) { age = checkAge() }
+                else {
+                    return ch1;
+                }
+            }
+        }
+        return age;
+    }
+
+    function checkLogin(logindata, data) {
+        var num = prompt("Enter your " + logindata + ":")
+        var i = data.findIndex(element => element[logindata] == num)
+        if (i >= 0 && num == data[i][logindata]) {
+            return { num, data }
+        }
+        alert(logindata + " is not Registered")
+        var ch = ContinueOrExit();
+        if (ch == true) { num = checkLogin(logindata, data) }
+        else {
+            return ch;
+        }
+
+    }
+
+    function displayEvent(data) {
+        var dis = ''
+        data.forEach(myFunction)
+        function myFunction(i) {
+            if (i.status == 0) {
+                dis = dis + i.id + ' - ' + i.eventDate + ' - ' + i.eventCapacity + ' - ' + i.eventFees + ' - ' + i.eventName + ' - ' + i.venue + ' \n '
+            }
+        }
+        if (dis == '') {
+            alert("Currently There are not any event. Please contact us for further information.")
+        }
+        else {
+            alert(dis)
+        }
+        return data;
+    }
+
+    function displayBookedEvent(data) {
+        var dis = '';
+        data.booking.forEach(myFunction)
+        function myFunction(i) {
+            if (i.status == 0) {
+                dis = dis + i.id + ' - ' + i.userid + ' - ' + i.eveid + ' - ' + i.price + ' \n '
+            }
+        }
+        if (dis == '') {
+            alert("You have not booked any event.")
+        }
+        else {
+            alert(dis)
+        }
+        return data;
+    }
+
+    function cancelEvent(data) {
+        var canid = prompt("Enter booking id  is you want to cancel??")
+        var i = data.booking.findIndex(element => element.id == canid)
+        var userIdinBooking = data.booking[i].userid
+        var eventIdinBooking = data.booking[i].eveid
+        var found = data.user.find(element => element.id == userIdinBooking)
+        var foundeveid = data.event.find(element => element.id == eventIdinBooking)
+        if (i >= 0 && data.booking[i].status == 0) {
+            found.InvestedMoney = found.InvestedMoney - data.booking[i].price
+            foundeveid.eventCapacity = foundeveid.eventCapacity + data.booking[i].sit
+            data.booking[i].status = 1
+            alert("Your booking is canceled.")
+            localStorage.setItem('eventwithfunc', JSON.stringify(data))
+        }
+        else {
+            alert("Please enter valid Id.")
+            var ch = ContinueOrExit()
+            if (ch == true) {
+                canid = cancelEvent()
+            }
+            else {
+                return ch;
+            }
+        }
+        return data;
+    }
+
+    function viewInvestedMoney(num, data) {
+        data.user.forEach(myFunction)
+        function myFunction(i) {
+            if (i.number == num) {
+                alert("Your Total Invented Money is " + i.InvestedMoney + " RS.")
+            }
+        }
+        return data;
+    }
+
+    function createEvent(cretaedBy, data) {
+        var eventName = prompt("Enter event name");
+        var eventDate = prompt("Enter event date")
+        var venue = prompt("Enter event location")
+        var eventCapacity = parseInt(prompt("Enter event capacity"))
+        var eventFees = parseInt(prompt("Enter event fees"))
+        var id = ++cc;
+        var status = 0;
+        var creator = cretaedBy
+        var tmp = { id, eventName, eventDate, venue, eventCapacity, eventFees, status, creator }
+        data.event.push(tmp)
+        localStorage.setItem('eventwithfunc', JSON.stringify(data))
+        alert("Event created Successfully")
+        return data
+    }
+
+    function displayAllEvent(data) {
+        var dis = ''
+        data.event.forEach(myFunction)
+        function myFunction(i) {
+            dis = dis + i.id + ' - ' + i.eventDate + ' - ' + i.eventCapacity + ' - ' + i.eventFees + ' - ' + i.eventName + ' - ' + i.venue + ' - ' + i.status + ' - ' + i.creator + ' \n '
+        }
+        if (dis == '') {
+            alert("Currently There are not any event. Please contact us for further information.")
+        }
+        else {
+            alert(dis)
+        }
+        return data;
+    }
+
+    function invalid() {
+        alert("Invalid Number!!!")
+    }
+
+    function Register(data) {
+        var id = ++counter;
+        var name = checkLength('Name', 3)
+        var number = checkRegister(data.user)
+        if (number == false) {
+            return data;
+        }
+        var age = checkAge()
+        if (age == false) {
+            return data;
+        }
+        var password = checkLength('Password', 6)
+        var status = 0;
+        var InvestedMoney = 0;
+        alert("Registration Successfully Completed!!!!")
+        var tmp = { id, name, number, age, password, status, InvestedMoney }
+        data.user.push(tmp)
+        localStorage.setItem('eventwithfunc', JSON.stringify(data))
+        return data
+    }
+
+    function eventBoking(data, num) {
+        if (data.event.length == 0) {
+            alert("Currently There are not any event. Please contact us for further information.")
+            return data;
+        }
+        else {
+            var eveid = parseInt(checkInput(eid, numberReg))
+            var oo = 0;
+            data.event.forEach(myFunction)
+            function myFunction(i) {
+                oo = -1
+                if (i.id == eveid) {
+                    oo = -2
+                    if (i.status == 0) {
+                        var sit = parseInt(checkInput(s, numberReg))
+                        if (sit > 0) {
+                            if (i.eventCapacity >= sit) {
+                                var tmp = {};
+                                tmp.bookinglist = []
+                                var a = 0;
+                                var k = 1;
+                                function seatName() {
+                                    var booktmp = {};
+                                    var bname = prompt("Enter name for " + k + " person")
+                                    var bage = prompt("Enter age " + k + " person")
+                                    booktmp.bkid = ++bookingc;
+                                    booktmp.bname = bname;
+                                    booktmp.bage = bage;
+                                    tmp.bookinglist.push(booktmp)
+                                    tmp.status = 0;
+                                    a++;
+                                    k++;
+                                    if (k <= sit) {
+                                        seatName()
+                                    }
+                                }
+                                seatName()
+                                tmp.sit = sit
+                                tmp.id = ++c;
+                                tmp.status = 0
+                                tmp.price = a * i.eventFees;
+                                tmp.eveid = i.id
+                                data.user.forEach(myFunction)
+                                function myFunction(j) {
+                                    if (j.number == num) {
+                                        j.InvestedMoney = j.InvestedMoney + tmp.price
+                                        tmp.userid = j.id;
+                                    }
+                                }
+                                data.booking.push(tmp)
+                                i.eventCapacity = i.eventCapacity - sit;
+                                alert("Your booking is successfull!!")
+                                localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                            }
+                            else {
+                                alert("Entered sit is not available.")
+                                var ch = ContinueOrExit()
+                                if (ch == false) {
+                                    return data;
+                                }
+                                data = eventBoking(data)
+                            }
+                        }
+                        else {
+                            alert("Please enter valid seat")
+                            var ch1 = ContinueOrExit()
+                            if (ch1 == false) {
+                                return data;
+                            }
+                            data = eventBoking(data)
+                        }
+                    }
+                }
+            }
+            if (oo == 0) {
+                alert("Currently There are not any event. Please contact us for further information.")
+                var ch2 = ContinueOrExit()
+                if (ch2 == false) {
+                    return data;
+                }
+                data = eventBoking(data)
+            }
+            if (oo == -1) {
+                alert("Event id is Wrong.")
+                var ch3 = ContinueOrExit()
+                if (ch3 == false) {
+                    return data;
+                }
+                data = eventBoking(data)
+            }
+        }
+        return data;
+    }
+
+    function afterLogin(data, num) {
+        var choice1 = parseInt(checkInput(choic1, numberReg))
+        switch (choice1) {
+            case 1:
+                if (data.event.length == 0) {
+                    alert("Currently There are not any event. Please contact us for further information.")
+                }
+                else {
+                    displayEvent(data.event)
+                }
+                break
+            case 2:
+                data = eventBoking(data, num)
+                localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                break
+            case 3:
+                data = displayBookedEvent(data);
+                break
+            case 4:
+                if (data.event.length == 0) {
+                    alert("Currently There are not any event. Please contact us for further information.")
+                }
+                else {
+                    data = cancelEvent(data)
+                }
+                break;
+            case 5:
+                data = viewInvestedMoney(num, data)
+                break
+            case 6:
+                return data;
+            default:
+                invalid()
+                break
+        }
+        data = afterLogin(data, num);
+        return data;
+    }
+
+    function Login(data) {
+        var { num, tmp } = checkLogin("number", data.user);
+        if (num == false) {
+            return data;
+        }
+        var pass = checkLogin("password", data.user);
+        if (pass == false) {
+            return data;
+        }
+        data = afterLogin(data, num)
+        localStorage.setItem('eventwithfunc', JSON.stringify(data))
+        return data;
+    }
+
+    function user(data) {
+        var choice = parseInt(checkInput(cho, numberReg))
+        switch (choice) {
+            case 1:
+                data = Register(data);
+                break
+            case 2:
+                data = Login(data)
+                break
+            case 3:
+                if (data.event.length == 0) {
+                    alert("Currently There are not any event. Please contact us for further information.")
+                }
+                else {
+                    displayEvent(data.event)
+                }
+                break
+            case 4:
+                return data;
+            default:
+                invalid()
+                break
+        }
+        data = user(data);
+        return data;
+    }
+
+    function updateEventBy(i) {
+        var sachoice1 = parseInt(checkInput(upevech, numberReg))
+        switch (sachoice1) {
+            case 1:
+                var newevname = prompt("Enter new event name:")
+                i.eventName = newevname
+                alert("Successfully Updated!!!")
+                break;
+            case 2:
+                var newevdate = prompt("Enter new event date:")
+                i.eventDate = newevdate
+                alert("Successfully Updated!!!")
+                break;
+            case 3:
+                var newevlocat = prompt("Enter new event loaction:")
+                i.venue = newevlocat
+                alert("Successfully Updated!!!")
+                break;
+            case 4:
+                var newevcapac = prompt("Enter new event capacity:")
+                i.eventCapacity = newevcapac
+                alert("Successfully Updated!!!")
+                break;
+            case 5:
+                var newevfees = prompt("Enter new event fees:")
+                i.eventFees = newevfees
+                alert("Successfully Updated!!!")
+                break;
+            case 6:
+                break;
+            default:
+                invalid()
+                break;
+        }
+        i = updateEventBy(i)
+        return i
+    }
+
+    function updateEvent(data) {
+        var eventId = parseInt(checkInput(upeveid, numberReg))
+        var oo = 0;
+        data.event.forEach(myFunction)
+        function myFunction(i) {
+            oo = -1
+            if (i.id == eventId) {
+                oo = -2
+                if (i.status == 0) {
+                    i = updateEventBy(i)
+                }
+            }
+        }
+        if (oo == 0) {
+            alert("Currently There are not any event.")
+            var ch2 = ContinueOrExit()
+            if (ch2 == false) {
+                return data
+            }
+            data = updateEvent(data)
+        }
+        if (oo == -1) {
+            alert("Event id is Wrong.")
+            var ch3 = ContinueOrExit()
+            if (ch3 == false) {
+                return data
+            }
+            data = updateEvent(data)
+        }
+        return data
+    }
+
+    function cancelEvent(data) {
+        var eventId = parseInt(checkInput(cneveid, numberReg))
+        var oo = 0;
+        data.event.forEach(myFunction)
+        function myFunction(i) {
+            oo = -1
+            if (i.id == eventId) {
+                oo = -2
+                if (i.status == 0) {
+                    i.status = 1;
+                }
+            }
+        }
+        if (oo == 0) {
+            alert("Currently There are not any event.")
+            var ch2 = ContinueOrExit()
+            if (ch2 == false) {
+                return data;
+            }
+            data = cancelEvent(data)
+        }
+        if (oo == -1) {
+            alert("Event id is Wrong.")
+            var ch3 = ContinueOrExit()
+            if (ch3 == false) {
+                return data
+            }
+            data = cancelEvent(data)
+        }
+        return data;
+    }
+
+    function manageEvent(data) {
+        var sachoice = parseInt(checkInput(sach, numberReg))
+        switch (sachoice) {
+            case 1:
+                data = createEvent("Super admin", data);
+                break
+            case 2:
+                displayEvent(data.event)
+                break
+            case 3:
+                data = updateEvent(data)
+                localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                break
+            case 4:
+                data = cancelEvent(data)
+                break
+            case 5:
+                data = displayAllEvent(data);
+                break
+            case 6:
+                return data;
+            default:
+                break
+        }
+        data = manageEvent(data);
+        return data;
+    }
+
+    function updateEventByAdmin(data) {
+        var eventId = parseInt(checkInput(upeveid, numberReg))
+        var oo = 0;
+        data.event.forEach(myFunction)
+        function myFunction(i) {
+            oo = -1
+            if (i.id == eventId) {
+                oo = -2
+                if (i.status == 0) {
+                    oo = -3
+                    if (i.creator == "Admin" || i.creator == "Employee") {
+                        i = updateEventBy(i)
+                    }
+                }
+            }
+        }
+        if (oo == 0) {
+            alert("Currently There are not any event.")
+            var ch2 = ContinueOrExit()
+            if (ch2 == false) {
+                return data;
+            }
+            data = updateEventByAdmin(data)
+        }
+        if (oo == -1) {
+            alert("Event id is Wrong.")
+            var ch3 = ContinueOrExit()
+            if (ch3 == false) {
+                return data
+            }
+            data = updateEventByAdmin(data)
+        }
+        if (oo = -3) {
+            alert("This Event is created By Super Admin! You cannot update it.")
+            var ch4 = ContinueOrExit()
+            if (ch4 == false) {
+                return data
+            }
+            data = updateEventByAdmin(data)
+        }
+        return data
+    }
+
+    function cancelEventByAdmin(data) {
+        var eventId = parseInt(checkInput(upeveid, numberReg))
+        var oo = 0;
+        data.event.forEach(myFunction)
+        function myFunction(i) {
+            oo = -1
+            if (i.id == eventId) {
+                oo = -2
+                if (i.status == 0) {
+                    oo = -3
+                    if (i.creator == "Admin" || i.creator == "Employee") {
+                        i.status = 1;
+                    }
+                }
+            }
+        }
+        if (oo == 0) {
+            alert("Currently There are not any event.")
+            var ch2 = ContinueOrExit()
+            if (ch2 == false) {
+                return data;
+            }
+            data = cancelEventByAdmin(data)
+        }
+        if (oo == -1) {
+            alert("Event id is Wrong.")
+            var ch3 = ContinueOrExit()
+            if (ch3 == false) {
+                return data
+            }
+            data = cancelEventByAdmin(data)
+        }
+        if (oo = -3) {
+            alert("This Event is created By Super Admin! You cannot update it.")
+            var ch4 = ContinueOrExit()
+            if (ch4 == false) {
+                return data
+            }
+            data = cancelEventByAdmin(data)
+        }
+        return data
+    }
+
+    function manageEvenetByAdmin(data) {
+        var sachoice = parseInt(checkInput(sach, numberReg))
+        switch (sachoice) {
+            case 1:
+                data = createEvent("Admin", data);
+                break
+            case 2:
+                displayEvent(data.event)
+                break
+            case 3:
+                data = updateEventByAdmin(data)
+                localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                break
+            case 4:
+                data = cancelEventByAdmin(data)
+                break
+            case 5:
+                displayAllEvent(data);
+                break
+            case 6:
+                return data;
+            default:
+                break;
+        }
+        data = manageEvenetByAdmin(data);
+        return data;
+    }
+
+    function manageEvntByEmployee(data) {
+        var echoice = parseInt(checkInput(ech, numberReg))
+        switch (echoice) {
+            case 1:
+                data = createEvent("Employee", data);
+                break
+            case 2:
+                displayEvent(data.event)
+                break
+            case 3:
+                return data
+            default:
+                invalid();
+                break
+        }
+        data = manageEvntByEmployee(data)
+        return data
+    }
+
+    function admin(data) {
+        var choice = parseInt(checkInput(adch, numberReg))
+        switch (choice) {
+            case 1:
+                var nam = checkLogin("name", data.admin);
+                if (nam == false) {
+                    break
+                }
+                var pass = checkLogin("password", data.admin);
+                if (pass == false) {
+                    break
+                }
+                data = manageEvent(data)
+                break
+            case 2:
+                var nam = checkLogin("name", data.admin);
+                if (nam == false) {
+                    break
+                }
+                var pass = checkLogin("password", data.admin);
+                if (pass == false) {
+                    break
+                }
+                data = manageEvenetByAdmin(data)
+                break
+            case 3:
+                var nam = checkLogin("name", data.admin);
+                if (nam == false) {
+                    break
+                }
+                var pass = checkLogin("password", data.admin);
+                if (pass == false) {
+                    break
+                }
+                data = manageEvntByEmployee(data)
+                break
+            case 4:
+                return data;
+            default:
+                invalid()
+                break
+        }
+        data = admin(data)
+        return data;
+    }
+
+    function main() {
+        if (localStorage.getItem('eventwithfunc') == null) {
+            var userlist = []
+            var eventlist = [];
+            var adminlist = [{ id: 1, name: "sadmin", password: "sadmin", role: "superadmin", status: 0 }, { id: 2, name: "admin", password: "admin", role: "admin", status: 0 }, { id: 3, name: "employee1", password: "employee1", role: "employee", status: 0 }];
+            var bookinglist = [];
+            var data = { user: userlist, event: eventlist, admin: adminlist, booking: bookinglist }
+        }
+        else {
+            var data = localStorage.getItem('eventwithfunc')
+            data = JSON.parse(data)
+            cc = data.event.length
+            counter = data.user.length;
+            c = data.booking.length
+        }
+        alert("This is welcome msg")
+        var mainChoice = parseInt(checkInput(mainch, numberReg))
+        switch (mainChoice) {
+            case 1:
+                data = user(data)
+                return main()
+            case 2:
+                data = admin(data)
+                return main()
+            case 3:
+                return
+            default:
+                // invalid()
+                return
+        }
+    }
+    main()
+</script>
