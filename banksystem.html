@@ -1,0 +1,308 @@
+<script>
+    var mainFlag = true;
+    var counter = 0;
+    if (localStorage.getItem('bankdata') == null) {
+        // var data = { id: [], nam: [], number: [], statu: [], Account: [], password: [], balance: [], passbook: [[[]]] }
+        var data = []
+    }
+    else {
+        var data = localStorage.getItem('bankdata')
+        data = JSON.parse(data)
+        var lastElement = [...data].pop() //[...list] -->The feature that we can leverage here is the SPREAD OPERATOR (...). Amongst other features, the spread operator can copy lists/arrays:
+        counter = lastElement[0]
+        alert(counter)
+    }
+    do {
+        var mainChoice = parseInt(prompt("enter number\n1.user\n2.admin\n3.exit"))
+        switch (mainChoice) {
+            case 1:
+                var flag1 = true;
+                do {
+                    var choice1 = parseInt(prompt("enter number\n1.register\n2.login\n3.exit"))
+                    switch (choice1) {
+                        case 1:
+                            do {
+                                var nm = prompt("enter name")
+                            } while (nm.length < 3)
+                            do {
+                                var flag = true;
+                                var num = prompt("Enter number:");
+                                var flag2 = true;
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i][2] == num) {
+                                        alert("Enter another number")
+                                        flag2 = false;
+                                    }
+                                }
+                                if (flag2 && num.length == 10) {
+                                    flag = false;
+                                }
+                            } while (flag);
+                            alert("registration successfull")
+                            var tmp = [++counter, nm, num, '', '', 0, "pending", []]
+                            data.push(tmp)
+                            localStorage.setItem('bankdata', JSON.stringify(data))
+                            break;
+                        case 2:
+                            loop1:
+                            do {
+                                var flag = true
+                                var nm = prompt("enter name")
+                                for (let i = 0; i < data.length; i++) {
+                                    if (data[i][1] == nm) {
+                                        do {
+                                            var flag1 = true
+                                            var pass = parseInt(prompt("enter password"))
+                                            if (pass == data[i][4]) {
+                                                do {
+                                                    var flag2 = true
+                                                    var ch = parseInt(prompt("enter number\n1.Withdraw\n2.Deposit\n3.History\n4.exit"))
+                                                    switch (ch) {
+                                                        case 1:
+                                                            do {
+                                                                var flag3 = true
+                                                                var wid = parseInt(prompt("enter amount"))
+                                                                if (data[i][5] > 0) {
+                                                                    if (wid > 0) {
+                                                                        var oldbal = data[i][5]
+                                                                        data[i][5] = data[i][5] - wid
+                                                                        var date = new Date()
+                                                                        var tmp = ['debit', oldbal, wid, data[i][5], "self", date]
+                                                                        data[i][7].push(tmp)
+                                                                        localStorage.setItem('bankdata', JSON.stringify(data))
+                                                                        alert("YOUR ACCOUNT " + data[i][2] + ' IS DEBITED BY RS ' + wid + " BY SELF. ON " + date + " BALANCE IS RS." + data[i][5])
+                                                                        break
+                                                                    }
+                                                                    else {
+                                                                        alert("please enter valid amount")
+                                                                        var ch2 = parseInt(prompt("you want to continue or exit\n1.continue\n2.exit"))
+                                                                        if (ch1 == 2) {
+                                                                            flag3 = false;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else {
+                                                                    alert("low balance")
+                                                                    var ch1 = parseInt(prompt("you want to continue or exit\n1.continue\n2.exit"))
+                                                                    if (ch1 == 2) {
+                                                                        flag3 = false;
+                                                                    }
+                                                                }
+                                                            } while (flag3)
+                                                            break;
+                                                        case 2:
+                                                            loop2:
+                                                            do {
+                                                                var flag3 = true;
+                                                                var dep = parseInt(prompt("enter amount"))
+                                                                if (dep > 0) {
+                                                                    do {
+                                                                        var flag4 = true;
+                                                                        var ch1 = parseInt(prompt("which account you want to depoite\n1.self\n2.other\n3.exit"))
+                                                                        switch (ch1) {
+                                                                            case 1:
+                                                                                var oldbal = data[i][5]
+                                                                                data[i][5] = data[i][5] + dep
+                                                                                // let date = new Date().toLocaleDateString();
+                                                                                var date = new Date()
+                                                                                var tmp = ['credit', oldbal, dep, data[i][5], "self", date]
+                                                                                data[i][7].push(tmp)
+                                                                                localStorage.setItem('bankdata', JSON.stringify(data))
+                                                                                alert("YOUR ACCOUNT " + data[i][2] + ' IS CREDITED BY RS ' + dep + " BY SELF ON " + date + ". BALANCE IS RS." + data[i][5])
+                                                                                flag4 = false;
+                                                                                var ch1 = parseInt(prompt("you want to continue or exit\n1.continue\n2.exit"))
+                                                                                if (ch1 == 2) {
+                                                                                    flag3 = false;
+                                                                                }
+                                                                                break;
+                                                                            case 2:
+                                                                                var oo = 0
+                                                                                var oo1 = 0
+                                                                                var nmo = prompt("enter name you want to depposite money")
+                                                                                for (let j = 0; j < data.length; j++) {
+                                                                                    if (data[j][1] == nmo) {
+                                                                                        oo = -1
+                                                                                        if (data[j][6] == "approve") {
+                                                                                            oo1 = -1
+                                                                                            var oldbal = data[j][5]
+                                                                                            data[j][5] = data[j][5] + dep
+                                                                                            var date = new Date()
+                                                                                            var tmp = ['credit', oldbal, dep, data[j][5], data[i][1], date]
+                                                                                            data[j][7].push(tmp)
+                                                                                            localStorage.setItem('bankdata', JSON.stringify(data))
+                                                                                            alert(data[j][1] + " ACCOUNT " + data[j][2] + ' IS CREDITED BY RS ' + dep + " BY " + data[i][1] + " ON " + date + " BALANCE IS RS." + data[j][5])
+                                                                                            flag4 = false;
+                                                                                            break loop2;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                if (oo == 0) {
+                                                                                    alert("Wrong name please check name and try again")
+                                                                                    break
+                                                                                }
+                                                                                if (oo1 == 0) {
+                                                                                    alert("Name which you have enterd is not approve")
+                                                                                    break
+                                                                                }
+                                                                                break
+                                                                            case 3:
+                                                                                flag4 = false
+                                                                                flag3 = false
+                                                                                break
+                                                                            default:
+                                                                                alert("invalid choice")
+                                                                                break;
+                                                                        }
+                                                                    } while (flag4)
+                                                                }
+                                                                else {
+                                                                    alert("please enter valid amount")
+                                                                    flag3 = false;
+                                                                }
+                                                            } while (flag3)
+                                                            break;
+                                                        case 3:
+                                                            var view = ''
+                                                            for (let j = 0; j < data[i][7].length; j++) {
+                                                                view = view + (j + 1) + ' - ' + data[i][7][j][0] + ' - ' + data[i][7][j][1] + ' - ' + data[i][7][j][2] + ' - ' + data[i][7][j][3] + ' - ' + data[i][7][j][4] + ' - ' + data[i][7][j][5] + '\n'
+                                                            }
+                                                            alert(view)
+                                                            break;
+                                                        case 4:
+                                                            flag2 = false
+                                                            break loop1;
+                                                        default:
+                                                            alert("enter valid number")
+                                                            break
+                                                    }
+                                                } while (flag2)
+                                            }
+                                            var ch2 = parseInt(prompt("Wrong password. do you want to continue or exit.\n1continue\n2.exit"))
+                                            if (ch2 == 2) {
+                                                break loop1;
+                                            }
+                                        } while (flag1)
+                                    }
+                                }
+                                var ch1 = parseInt(prompt("Please enter valid name. Do you want to continue or exit.\n1continue\n2.exit"))
+                                if (ch1 == 2) {
+                                    flag = false
+                                }
+                            } while (flag)
+                            break;
+                        case 3:
+                            flag1 = false
+                            break;
+                        default:
+                            alert("enter vaalid number")
+                            break;
+                    }
+                } while (flag1)
+                break;
+            case 2:
+                do {
+                    var flag = true;
+                    var username = prompt("enter username")
+                    if (username == "admin") {
+                        do {
+                            flag = false
+                            var flag1 = true;
+                            var pass = prompt("enter password")
+                            if (pass == "admin") {
+                                flag1 = false
+                                do {
+                                    var flag2 = true
+                                    var choice = parseInt(prompt("enter number\n1.Manage user\n2.User wise History\n3.exit"))
+                                    switch (choice) {
+                                        case 1:
+                                            do {
+                                                var flag5 = true;
+                                                if (data.length == 0) {
+                                                    alert("bank ma koi account j nathi")
+                                                    break;
+                                                }
+                                                else {
+                                                    var view = ''
+                                                    for (let i = 0; i < data.length; i++) {
+                                                        view = view + data[i][0] + ' - ' + data[i][1] + ' - ' + data[i][2] + ' - ' + data[i][6] + '\n'
+                                                    }
+                                                    alert(view)
+                                                    do {
+                                                        var flag3 = true;
+                                                        var oo1 = 0
+                                                        var oo = 0
+                                                        var idn = parseInt(prompt("enter id you want to approve"))
+                                                        for (let i = 0; i < data.length; i++) {
+                                                            if (data[i][0] == idn) {
+                                                                oo = -1
+                                                                if (data[i][6] == "pending") {
+                                                                    oo1 = -1
+                                                                    data[i][6] = "approve"
+                                                                    data[i][3] = Math.floor(Math.random() * 1E17)
+                                                                    data[i][4] = Math.floor(Math.random() * 1E4)
+                                                                    localStorage.setItem('bankdata', JSON.stringify(data))
+                                                                    alert("approved")
+                                                                }
+                                                            }
+                                                        }
+                                                        if (oo == 0) {
+                                                            alert("id is not exist")
+                                                            break;
+
+                                                        }
+                                                        if (oo1 == 0) {
+                                                            alert("id is already approved")
+                                                            break;
+                                                        }
+                                                    } while (flag3)
+                                                    var ch1 = parseInt(prompt("You want to continue or exist\n1.continue\n2.exist"))
+                                                    if (ch1 == 2) {
+                                                        flag5 = false
+                                                    }
+                                                }
+                                            } while (flag5)
+                                            break;
+                                        case 2:
+                                            var view1 = '';
+                                            for (let i = 0; i < data.length; i++) {
+                                                view1 = view1 + data[i][0] + ' - ' + data[i][1] + ' - ' + data[i][2] + ' - ' + data[i][3] + ' - ' + data[i][4] + ' - ' + data[i][5] + ' - ' + data[i][6] + '\n'
+                                            }
+                                            alert(view1)
+                                            break;
+                                        case 3:
+                                            flag2 = false
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                } while (flag2)
+                            }
+                            else {
+                                alert("invalid password")
+                                var ch2 = parseInt(prompt("You want to continue or exit\n1.continue\n2.exit"))
+                                if (ch2 == 2) {
+                                    flag1 = false;
+                                    flag = false;
+                                }
+                            }
+                        } while (flag1)
+                    }
+                    else {
+                        alert("invalid username")
+                        var ch3 = parseInt(prompt("You want to continue or exit\n1.continue\n2.exit"))
+                        if (ch3 == 2) {
+                            flag = false;
+                        }
+                    }
+                } while (flag)
+                break;
+            case 3:
+                mainFlag = false
+                break;
+            default:
+                alert("enter valid number.")
+                break;
+        }
+
+    } while (mainFlag)
+</script>
