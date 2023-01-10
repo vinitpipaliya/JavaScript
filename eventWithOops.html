@@ -1,0 +1,758 @@
+<script>
+
+    class coe {
+        static ContinueOrExit() {
+            var ch = parseInt(prompt("Do you want to continue or exit?\n1.Continue\n2.Exit"))
+            if (ch == 2) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+    class valid {
+        static checkInput(msg, reg) {
+            do {
+                var check = prompt(msg)
+                if (!check.match(reg)) {
+                    alert("Invalid Input!!!")
+                    var ch = coe.ContinueOrExit()
+                }
+                else {
+                    ch = false
+                }
+            } while (ch)
+            return check;
+        }
+
+        static checkLength(str, len) {
+            do {
+                var flag = 0
+                var nm = prompt("Enter your " + str + " :")
+                if (nm.length < len) {
+                    alert("Please enter greater than " + len + " character.")
+                    var ch = coe.ContinueOrExit()
+                }
+                else {
+                    flag = 1
+                }
+            } while (flag == 0)
+            return nm
+        }
+
+        static checkRegister(data) {
+            do {
+                var flag = 0
+                var numb = valid.checkLength('Number', 10)
+                var i = data.findIndex(element => element.number == numb)
+                if (i >= 0) {
+                    alert("This number is already Register.")
+                    var ch = coe.ContinueOrExit();
+                }
+                else {
+                    flag = 1
+                }
+            } while (flag == 0)
+            return numb;
+        }
+    }
+
+    class findIn {
+        static checkLogin(logindata, data) {
+            do {
+                var flag = 0
+                var num = prompt("Enter your " + logindata + ":")
+                var i = data.findIndex(element => element[logindata] == num)
+                if (i >= 0 && num == data[i][logindata]) {
+                    return { num, data }
+                }
+                alert(logindata + " is not Registered")
+                var ch = coe.ContinueOrExit();
+                if (ch == false) {
+                    return ch;
+                }
+            } while (flag == 0)
+        }
+    }
+
+    class events {
+        static displayEvent(data) {
+            var dis = ''
+            data.forEach(myFunction)
+            function myFunction(i) {
+                if (i.status == 0) {
+                    dis = dis + i.id + ' - ' + i.eventDate + ' - ' + i.eventCapacity + ' - ' + i.eventFees + ' - ' + i.eventName + ' - ' + i.venue + ' \n '
+                }
+            }
+            if (dis == '') {
+                alert("Currently There are not any event. Please contact us for further information.")
+            }
+            else {
+                alert(dis)
+            }
+            return data;
+        }
+
+        static eventBoking(data, num) {
+            do {
+                var flag = 0
+                if (data.event.length == 0) {
+                    alert("Currently There are not any event. Please contact us for further information.")
+                    return data;
+                }
+                else {
+                    var eveid = parseInt(valid.checkInput(eid, numberReg))
+                    var oo = 0;
+                    data.event.forEach(myFunction)
+                    function myFunction(i) {
+                        oo = -1
+                        if (i.id == eveid) {
+                            oo = -2
+                            if (i.status == 0) {
+                                var sit = parseInt(valid.checkInput(s, numberReg))
+                                if (sit > 0) {
+                                    if (i.eventCapacity >= sit) {
+                                        var tmp = {};
+                                        tmp.sit = sit
+                                        tmp.id = ++c;
+                                        tmp.status = 0
+                                        tmp.price = sit * i.eventFees;
+                                        tmp.eveid = i.id
+                                        data.user.forEach(myFunction)
+                                        function myFunction(j) {
+                                            if (j.number == num) {
+                                                j.InvestedMoney = j.InvestedMoney + tmp.price
+                                                tmp.userid = j.id;
+                                            }
+                                        }
+                                        data.booking.push(tmp)
+                                        i.eventCapacity = i.eventCapacity - sit;
+                                        alert("Your booking is successfull!!")
+                                        localStorage.setItem('event', JSON.stringify(data))
+                                        flag = 1;
+                                    }
+                                    else {
+                                        alert("Entered sit is not available.")
+                                        var ch = coe.ContinueOrExit()
+                                        if (ch == false) {
+                                            return data;
+                                        }
+                                    }
+                                }
+                                else {
+                                    alert("Please enter valid seat")
+                                    var ch1 = coe.ContinueOrExit()
+                                    if (ch1 == false) {
+                                        return data;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (oo == 0) {
+                        alert("Currently There are not any event. Please contact us for further information.")
+                        var ch2 = coe.ContinueOrExit()
+                        if (ch2 == false) {
+                            return data;
+                        }
+                    }
+                    if (oo == -1) {
+                        alert("Event id is Wrong.")
+                        var ch3 = coe.ContinueOrExit()
+                        if (ch3 == false) {
+                            return data;
+                        }
+                    }
+                }
+            } while (flag == 0)
+            return data;
+        }
+
+        static displayBookedEvent(data) {
+            var dis = '';
+            data.booking.forEach(myFunction)
+            function myFunction(i) {
+                if (i.status == 0) {
+                    dis = dis + i.id + ' - ' + i.userid + ' - ' + i.eveid + ' - ' + i.price + ' \n '
+                }
+            }
+            if (dis == '') {
+                alert("You have not booked any event.")
+            }
+            else {
+                alert(dis)
+            }
+            return data;
+        }
+
+        static cancelEvent(data) {
+            var canid = prompt("Enter booking id  is you want to cancel??")
+            var i = data.booking.findIndex(element => element.id == canid)
+            var userIdinBooking = data.booking[i].userid
+            var eventIdinBooking = data.booking[i].eveid
+            var found = data.user.find(element => element.id == userIdinBooking)
+            var foundeveid = data.event.find(element => element.id == eventIdinBooking)
+            if (i >= 0 && data.booking[i].status == 0) {
+                found.InvestedMoney = found.InvestedMoney - data.booking[i].price
+                foundeveid.eventCapacity = foundeveid.eventCapacity + data.booking[i].sit
+                data.booking[i].status = 1
+                alert("Your booking is canceled.")
+                localStorage.setItem('eventwithfunc', JSON.stringify(data))
+            }
+            else {
+                alert("Please enter valid Id.")
+                var ch = coe.ContinueOrExit()
+                if (ch == false) {
+                    return ch;
+                }
+            }
+            return data;
+        }
+
+        static viewInvestedMoney(num, data) {
+            data.user.forEach(myFunction)
+            function myFunction(i) {
+                if (i.number == num) {
+                    alert("Your Total Invented Money is " + i.InvestedMoney + " RS.")
+                }
+            }
+            return data;
+        }
+    }
+
+    class account {
+        static afterLogin(data, num) {
+            do {
+                var flag = 0
+                var choice1 = parseInt(valid.checkInput(choic1, numberReg))
+                switch (choice1) {
+                    case 1:
+                        if (data.event.length == 0) {
+                            alert("Currently There are not any event. Please contact us for further information.")
+                        }
+                        else {
+                            events.displayEvent(data.event)
+                        }
+                        break;
+                    case 2:
+                        data = events.eventBoking(data, num)
+                        localStorage.setItem('event', JSON.stringify(data))
+                        break;
+                    case 3:
+                        data = events.displayBookedEvent(data);
+                        break;
+                    case 4:
+                        if (data.event.length == 0) {
+                            alert("Currently There are not any event. Please contact us for further information.")
+                        }
+                        else {
+                            data = events.cancelEvent(data)
+                        }
+                        break;
+                    case 5:
+                        data = events.viewInvestedMoney(num, data)
+                        break
+                    case 6:
+                        flag = 1
+                    default:
+                        alert("Invalid Input!!!")
+                        break;
+                }
+            } while (flag == 0)
+            return data;
+        }
+    }
+
+    class profile {
+
+        static Register(data) {
+            var id = ++counter;
+            var name = valid.checkLength('Name', 3)
+            var number = valid.checkRegister(data.user)
+            if (number == false) {
+                return data;
+            }
+            var age = checkAge()
+            if (age == false) {
+                return data;
+            }
+            var password = valid.checkLength('Password', 6)
+            var status = 0;
+            var InvestedMoney = 0;
+            alert("Registration Successfully Completed!!!!")
+            var tmp = { id, name, number, age, password, status, InvestedMoney }
+            data.user.push(tmp)
+            localStorage.setItem('event', JSON.stringify(data))
+            return data
+        }
+
+        static Login(data) {
+            var { num, tmp } = findIn.checkLogin("number", data.user);
+            if (num == false) {
+                return data;
+            }
+            var pass = findIn.checkLogin("password", data.user);
+            if (pass == false) {
+                return data;
+            }
+            data = account.afterLogin(data, num)
+            localStorage.setItem('event', JSON.stringify(data))
+            return data;
+        }
+    }
+
+    class user {
+        static user(data) {
+            do {
+                var flag = 0
+                var choice = parseInt(valid.checkInput(cho, numberReg))
+                switch (choice) {
+                    case 1:
+                        data = profile.Register(data);
+                        break;
+                    case 2:
+                        data = profile.Login(data)
+                        break;
+                    case 3:
+                        if (data.event.length == 0) {
+                            alert("Currently There are not any event. Please contact us for further information.")
+                        }
+                        else {
+                            events.displayEvent(data.event)
+                        }
+                        break;
+                    case 4:
+                        flag = 1;
+                        break;
+                    default:
+                        alert("Invalid input!!!")
+                        break
+                }
+            } while (flag == 0)
+            return data;
+        }
+    }
+
+    class radhe {
+        static createEvent(cretaedBy, data) {
+            var eventName = prompt("Enter event name");
+            var eventDate = prompt("Enter event date")
+            var venue = prompt("Enter event location")
+            var eventCapacity = parseInt(prompt("Enter event capacity"))
+            var eventFees = parseInt(prompt("Enter event fees"))
+            var id = ++cc;
+            var status = 0;
+            var creator = cretaedBy
+            var tmp = { id, eventName, eventDate, venue, eventCapacity, eventFees, status, creator }
+            data.event.push(tmp)
+            localStorage.setItem('eventwithfunc', JSON.stringify(data))
+            alert("Event created Successfully")
+            return data
+        }
+
+        static updateEventBy(i) {
+            do {
+                var flag = 0
+                var sachoice1 = parseInt(valid.checkInput(upevech, numberReg))
+                switch (sachoice1) {
+                    case 1:
+                        var newevname = prompt("Enter new event name:")
+                        i.eventName = newevname
+                        alert("Successfully Updated!!!")
+                        break;
+                    case 2:
+                        var newevdate = prompt("Enter new event date:")
+                        i.eventDate = newevdate
+                        alert("Successfully Updated!!!")
+                        break;
+                    case 3:
+                        var newevlocat = prompt("Enter new event loaction:")
+                        i.venue = newevlocat
+                        alert("Successfully Updated!!!")
+                        break;
+                    case 4:
+                        var newevcapac = prompt("Enter new event capacity:")
+                        i.eventCapacity = newevcapac
+                        alert("Successfully Updated!!!")
+                        break;
+                    case 5:
+                        var newevfees = prompt("Enter new event fees:")
+                        i.eventFees = newevfees
+                        alert("Successfully Updated!!!")
+                        break;
+                    case 6:
+                        flag = 1
+                        break;
+                    default:
+                        alert("Invalid Input!!!")
+                        break;
+                }
+            } while (flag == 0)
+            return i
+        }
+
+        static updateEvent(data) {
+            do {
+                var flag = 0;
+                var eventId = parseInt(valid.checkInput(upeveid, numberReg))
+                var oo = 0;
+                data.event.forEach(myFunction)
+                function myFunction(i) {
+                    oo = -1
+                    if (i.id == eventId) {
+                        oo = -2
+                        if (i.status == 0) {
+                            i = radhe.updateEventBy(i)
+                        }
+                    }
+                }
+                if (oo == 0) {
+                    alert("Currently There are not any event.")
+                    var ch2 = coe.ContinueOrExit()
+                    if (ch2 == false) {
+                        return data
+                    }
+                }
+                if (oo == -1) {
+                    alert("Event id is Wrong.")
+                    var ch3 = coe.ContinueOrExit()
+                    if (ch3 == false) {
+                        return data
+                    }
+                }
+            } while (flag == 0)
+            return data
+        }
+
+        static cancelEvent(data) {
+            do {
+                var flag = 0
+                var canid = prompt("Enter booking id  is you want to cancel??")
+                var i = data.booking.findIndex(element => element.id == canid)
+                var userIdinBooking = data.booking[i].userid
+                var eventIdinBooking = data.booking[i].eveid
+                var found = data.user.find(element => element.id == userIdinBooking)
+                var foundeveid = data.event.find(element => element.id == eventIdinBooking)
+                if (i >= 0 && data.booking[i].status == 0) {
+                    found.InvestedMoney = found.InvestedMoney - data.booking[i].price
+                    foundeveid.eventCapacity = foundeveid.eventCapacity + data.booking[i].sit
+                    data.booking[i].status = 1
+                    alert("Your booking is canceled.")
+                    localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                    flag = 1
+                }
+                else {
+                    alert("Please enter valid Id.")
+                    var ch = coe.ContinueOrExit()
+                    if (ch == false) {
+                        return ch;
+                    }
+                }
+            } while (flag == 0)
+        }
+
+        static displayAllEvent(data) {
+            var dis = ''
+            data.event.forEach(myFunction)
+            function myFunction(i) {
+                dis = dis + i.id + ' - ' + i.eventDate + ' - ' + i.eventCapacity + ' - ' + i.eventFees + ' - ' + i.eventName + ' - ' + i.venue + ' - ' + i.status + ' - ' + i.creator + ' \n '
+            }
+            if (dis == '') {
+                alert("Currently There are not any event. Please contact us for further information.")
+            }
+            else {
+                alert(dis)
+            }
+            return data;
+        }
+    }
+
+    class owner {
+        static manageEvent(data) {
+            do {
+                var flag = 0
+                var sachoice = parseInt(valid.checkInput(sach, numberReg))
+                switch (sachoice) {
+                    case 1:
+                        data = radhe.createEvent("Super admin", data);
+                        break
+                    case 2:
+                        events.displayEvent(data.event)
+                        breakz
+                    case 3:
+                        data = radhe.updateEvent(data)
+                        localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                        break
+                    case 4:
+                        data = radhe.cancelEvent(data)
+                        break
+                    case 5:
+                        data = radhe.displayAllEvent(data);
+                        break
+                    case 6:
+                        flag = 1
+                        break;
+                    default:
+                        break
+                }
+            } while (flag == 0)
+            return data;
+        }
+    }
+
+    class krishna {
+        static updateEventByAdmin(data) {
+            do {
+                var flag = 0
+                var eventId = parseInt(valid.checkInput(upeveid, numberReg))
+                var oo = 0;
+                data.event.forEach(myFunction)
+                function myFunction(i) {
+                    oo = -1
+                    if (i.id == eventId) {
+                        oo = -2
+                        if (i.status == 0) {
+                            oo = -3
+                            if (i.creator == "Admin" || i.creator == "Employee") {
+                                i = radhe.updateEventBy(i)
+                                flag = 1
+                            }
+                        }
+                    }
+                }
+                if (oo == 0) {
+                    alert("Currently There are not any event.")
+                    var ch2 = coe.ContinueOrExit()
+                    if (ch2 == false) {
+                        return data;
+                    }
+                }
+                if (oo == -1) {
+                    alert("Event id is Wrong.")
+                    var ch3 = coe.ContinueOrExit()
+                    if (ch3 == false) {
+                        return data
+                    }
+                }
+                if (oo = -3) {
+                    alert("This Event is created By Super Admin! You cannot update it.")
+                    var ch4 = coe.ContinueOrExit()
+                    if (ch4 == false) {
+                        return data
+                    }
+                }
+            } while (flag == 0)
+            return data
+        }
+
+        static cancelEventByAdmin(data) {
+            do {
+                var flag = 0
+                var eventId = parseInt(valid.checkInput(upeveid, numberReg))
+                var oo = 0;
+                data.event.forEach(myFunction)
+                function myFunction(i) {
+                    oo = -1
+                    if (i.id == eventId) {
+                        oo = -2
+                        if (i.status == 0) {
+                            oo = -3
+                            if (i.creator == "Admin" || i.creator == "Employee") {
+                                i.status = 1;
+                                flag = 1
+                            }
+                        }
+                    }
+                }
+                if (oo == 0) {
+                    alert("Currently There are not any event.")
+                    var ch2 = coe.ContinueOrExit()
+                    if (ch2 == false) {
+                        return data;
+                    }
+                }
+                if (oo == -1) {
+                    alert("Event id is Wrong.")
+                    var ch3 = coe.ContinueOrExit()
+                    if (ch3 == false) {
+                        return data
+                    }
+                }
+                if (oo = -3) {
+                    alert("This Event is created By Super Admin! You cannot update it.")
+                    var ch4 = coe.ContinueOrExit()
+                    if (ch4 == false) {
+                        return data
+                    }
+                }
+            } while (flag == 0)
+            return data
+        }
+    }
+
+    class manager {
+        static manageEvenetByAdmin(data) {
+            do {
+                var flag = 0
+                var sachoice = parseInt(valid.checkInput(sach, numberReg))
+                switch (sachoice) {
+                    case 1:
+                        data = radhe.createEvent("Admin", data);
+                        break
+                    case 2:
+                        events.displayEvent(data.event)
+                        break
+                    case 3:
+                        data = krishna.updateEventByAdmin(data)
+                        localStorage.setItem('eventwithfunc', JSON.stringify(data))
+                        break
+                    case 4:
+                        data = krishna.cancelEventByAdmin(data)
+                        break
+                    case 5:
+                        radhe.displayAllEvent(data);
+                        break
+                    case 6:
+                        return data;
+                    default:
+                        break;
+                }
+            } while (flag == 0)
+            return data;
+        }
+    }
+
+    class employee {
+        static manageEvntByEmployee(data) {
+            do {
+                var flag = 0
+                var echoice = parseInt(valid.checkInput(ech, numberReg))
+                switch (echoice) {
+                    case 1:
+                        data = radhe.createEvent("Employee", data);
+                        break
+                    case 2:
+                        events.displayEvent(data.event)
+                        break
+                    case 3:
+                        flag = 1
+                        break;
+                    default:
+                        alert("Invalid Input!!!")
+                        break
+                }
+            } while (flag == 0)
+            return data
+        }
+    }
+
+    class admin {
+        static admin(data) {
+            do {
+                var flag = 0
+                var choice = parseInt(valid.checkInput(adch, numberReg))
+                switch (choice) {
+                    case 1:
+                        var nam = findIn.checkLogin("name", data.admin);
+                        if (nam == false) {
+                            break
+                        }
+                        var pass = findIn.checkLogin("password", data.admin);
+                        if (pass == false) {
+                            break
+                        }
+                        data = owner.manageEvent(data)
+                        break
+                    case 2:
+                        var nam = findIn.checkLogin("name", data.admin);
+                        if (nam == false) {
+                            break
+                        }
+                        var pass = findIn.checkLogin("password", data.admin);
+                        if (pass == false) {
+                            break
+                        }
+                        data = manager.manageEvenetByAdmin(data)
+                        break
+                    case 3:
+                        var nam = findIn.checkLogin("name", data.admin);
+                        if (nam == false) {
+                            break
+                        }
+                        var pass = findIn.checkLogin("password", data.admin);
+                        if (pass == false) {
+                            break
+                        }
+                        data = employee.manageEvntByEmployee(data)
+                        break
+                    case 4:
+                        flag = 1;
+                        break;
+                    default:
+                        alert("Invalid Input!!!")
+                        break;
+                }
+            } while (flag == 0)
+            return data;
+        }
+    }
+
+    class mainClass {
+        main(data) {
+            do {
+                var flag = 0
+                var mainChoice = parseInt(valid.checkInput(mainch, numberReg))
+                switch (mainChoice) {
+                    case 1:
+                        data = user.user(data)
+                        break;
+                    case 2:
+                        data = admin.admin(data)
+                        break;
+                    case 3:
+                        flag = 1
+                        break;
+                    default:
+                        alert("Invalid input!!")
+                        return
+                }
+            } while (flag == 0)
+        }
+    }
+
+    var mainch = "Enter number\n1.User\n2.Admin\n3.Exit"
+    var cho = "Enter number\n1.Register\n2.Login\n3.Visitor\n4.Exit"
+    // var coe = "Do you want to continue or exit?\n1.Continue\n2.Exit"
+    var choic1 = "Enter numbre\n1.All Events\n2.Event Booking\n3.Booked Event\n4.Cancel Booking\n5.Invented Money\n6.Exit"
+    var agein = "Enter Your age:"
+    var eid = "Enter event id you want to booking"
+    var s = "Enter How many sear you want to booking:"
+    var adch = "Enter number\n1.Super admin\n2.Manager\n3.Employee\n4.Exit"
+    var sach = "Enter number\n1.Add Event\n2.View Event\n3.Update Event\n4.Delete Event\n5.History\n6.Exit"
+    var upeveid = "Enter event id you want to update"
+    var cneveid = "Enter event id you want to cancel"
+    var upevech = "What you want to update?\n1.Event Name\n2.Date\n3.Location\n4.Capacity\n5.Type\n6.Exit"
+    var ech = "Enter number\n1.Add Event\n2.View Event\n3.Exit"
+    var numberReg = /^\d+$/;
+    var counter = 0
+    var cc = 0
+    var c = 0
+    if (localStorage.getItem('event') == null) {
+        var userList = [];
+        var eventlist = []
+        var adminlist = [{ id: 1, name: "sadmin", password: "sadmin", role: "superadmin", status: 0 }, { id: 2, name: "admin", password: "admin", role: "admin", status: 0 }, { id: 3, name: "employee1", password: "employee1", role: "employee", status: 0 }]
+        var bookinglist = []
+        var data = { user: userList, event: eventlist, admin: adminlist, booking: bookinglist }
+    }
+    else {
+        var data = localStorage.getItem('event')
+        data = JSON.parse(data)
+        cc = data.event.length
+        counter = data.user.length;
+        c = data.booking.length
+    }
+    var start = new mainClass();
+    start.main(data)
+</script>
