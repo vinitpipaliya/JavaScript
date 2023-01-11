@@ -95,7 +95,7 @@
             return data;
         }
 
-        static eventBoking(data, num) {
+        eventBoking(data, num) {
             do {
                 var flag = 0
                 if (data.event.length == 0) {
@@ -170,7 +170,7 @@
             return data;
         }
 
-        static displayBookedEvent(data) {
+        displayBookedEvent(data) {
             var dis = '';
             data.booking.forEach(myFunction)
             function myFunction(i) {
@@ -187,7 +187,7 @@
             return data;
         }
 
-        static cancelEvent(data) {
+        cancelEvent(data) {
             var canid = prompt("Enter booking id  is you want to cancel??")
             var i = data.booking.findIndex(element => element.id == canid)
             var userIdinBooking = data.booking[i].userid
@@ -211,7 +211,7 @@
             return data;
         }
 
-        static viewInvestedMoney(num, data) {
+        viewInvestedMoney(num, data) {
             data.user.forEach(myFunction)
             function myFunction(i) {
                 if (i.number == num) {
@@ -222,8 +222,8 @@
         }
     }
 
-    class account {
-        static afterLogin(data, num) {
+    class account extends events {
+        afterLogin(data, num) {
             do {
                 var flag = 0
                 var choice1 = parseInt(valid.checkInput(choic1, numberReg))
@@ -233,26 +233,26 @@
                             alert("Currently There are not any event. Please contact us for further information.")
                         }
                         else {
-                            events.displayEvent(data.event)
+                            this.displayEvent(data.event)
                         }
                         break;
                     case 2:
-                        data = events.eventBoking(data, num)
+                        data = this.eventBoking(data, num)
                         localStorage.setItem('event', JSON.stringify(data))
                         break;
                     case 3:
-                        data = events.displayBookedEvent(data);
+                        data = this.displayBookedEvent(data);
                         break;
                     case 4:
                         if (data.event.length == 0) {
                             alert("Currently There are not any event. Please contact us for further information.")
                         }
                         else {
-                            data = events.cancelEvent(data)
+                            data = this.cancelEvent(data)
                         }
                         break;
                     case 5:
-                        data = events.viewInvestedMoney(num, data)
+                        data = this.viewInvestedMoney(num, data)
                         break
                     case 6:
                         flag = 1
@@ -265,9 +265,9 @@
         }
     }
 
-    class profile {
+    class profile extends account {
 
-        static Register(data) {
+        Register(data) {
             var id = ++counter;
             var name = valid.checkLength('Name', 3)
             var number = valid.checkRegister(data.user)
@@ -288,7 +288,7 @@
             return data
         }
 
-        static Login(data) {
+        Login(data) {
             var { num, tmp } = findIn.checkLogin("number", data.user);
             if (num == false) {
                 return data;
@@ -297,23 +297,23 @@
             if (pass == false) {
                 return data;
             }
-            data = account.afterLogin(data, num)
+            data = this.afterLogin(data, num)
             localStorage.setItem('event', JSON.stringify(data))
             return data;
         }
     }
 
-    class user {
-        static user(data) {
+    class user extends profile {
+        user(data) {
             do {
                 var flag = 0
                 var choice = parseInt(valid.checkInput(cho, numberReg))
                 switch (choice) {
                     case 1:
-                        data = profile.Register(data);
+                        data = this.Register(data);
                         break;
                     case 2:
-                        data = profile.Login(data)
+                        data = this.Login(data)
                         break;
                     case 3:
                         if (data.event.length == 0) {
@@ -352,7 +352,7 @@
             return data
         }
 
-        static updateEventBy(i) {
+        updateEventBy(i) {
             do {
                 var flag = 0
                 var sachoice1 = parseInt(valid.checkInput(upevech, numberReg))
@@ -393,7 +393,7 @@
             return i
         }
 
-        static updateEvent(data) {
+        updateEvent(data) {
             do {
                 var flag = 0;
                 var eventId = parseInt(valid.checkInput(upeveid, numberReg))
@@ -426,7 +426,7 @@
             return data
         }
 
-        static cancelEvent(data) {
+        cancelEvent(data) {
             do {
                 var flag = 0
                 var canid = prompt("Enter booking id  is you want to cancel??")
@@ -453,7 +453,7 @@
             } while (flag == 0)
         }
 
-        static displayAllEvent(data) {
+        displayAllEvent(data) {
             var dis = ''
             data.event.forEach(myFunction)
             function myFunction(i) {
@@ -469,27 +469,27 @@
         }
     }
 
-    class owner {
-        static manageEvent(data) {
+    class owner extends radhe {
+        manageEvent(data) {
             do {
                 var flag = 0
                 var sachoice = parseInt(valid.checkInput(sach, numberReg))
                 switch (sachoice) {
                     case 1:
-                        data = radhe.createEvent("Super admin", data);
+                        data = this.createEvent("Super admin", data);
                         break
                     case 2:
                         events.displayEvent(data.event)
-                        breakz
+                        break
                     case 3:
-                        data = radhe.updateEvent(data)
+                        data = this.updateEvent(data)
                         localStorage.setItem('eventwithfunc', JSON.stringify(data))
                         break
                     case 4:
-                        data = radhe.cancelEvent(data)
+                        data = this.cancelEvent(data)
                         break
                     case 5:
-                        data = radhe.displayAllEvent(data);
+                        data = this.displayAllEvent(data);
                         break
                     case 6:
                         flag = 1
@@ -502,8 +502,16 @@
         }
     }
 
+    // interface forUpdate{
+    //     updateEventByAdmin();  -->it can be used only typescript file.  
+    // }
+
+    // abstract class forUpdate {
+    //     updateEventByAdmin(); -->It can be used in only typescript files.
+    // }
+
     class krishna {
-        static updateEventByAdmin(data) {
+        updateEventByAdmin(data) {
             do {
                 var flag = 0
                 var eventId = parseInt(valid.checkInput(upeveid, numberReg))
@@ -547,7 +555,7 @@
             return data
         }
 
-        static cancelEventByAdmin(data) {
+        cancelEventByAdmin(data) {
             do {
                 var flag = 0
                 var eventId = parseInt(valid.checkInput(upeveid, numberReg))
@@ -592,8 +600,8 @@
         }
     }
 
-    class manager {
-        static manageEvenetByAdmin(data) {
+    class manager extends krishna {
+        manageEvenetByAdmin(data) {
             do {
                 var flag = 0
                 var sachoice = parseInt(valid.checkInput(sach, numberReg))
@@ -605,14 +613,15 @@
                         events.displayEvent(data.event)
                         break
                     case 3:
-                        data = krishna.updateEventByAdmin(data)
+                        data = this.updateEventByAdmin(data)
                         localStorage.setItem('eventwithfunc', JSON.stringify(data))
                         break
                     case 4:
-                        data = krishna.cancelEventByAdmin(data)
+                        data = this.cancelEventByAdmin(data)
                         break
                     case 5:
-                        radhe.displayAllEvent(data);
+                        var get = new radhe()
+                        get.displayAllEvent(data);
                         break
                     case 6:
                         return data;
@@ -625,7 +634,7 @@
     }
 
     class employee {
-        static manageEvntByEmployee(data) {
+        manageEvntByEmployee(data) {
             do {
                 var flag = 0
                 var echoice = parseInt(valid.checkInput(ech, numberReg))
@@ -648,44 +657,47 @@
         }
     }
 
-    class admin {
-        static admin(data) {
+    class admin extends findIn {
+        admin(data) {
             do {
                 var flag = 0
                 var choice = parseInt(valid.checkInput(adch, numberReg))
                 switch (choice) {
                     case 1:
-                        var nam = findIn.checkLogin("name", data.admin);
+                        var nam = this.checkLogin("name", data.admin);
                         if (nam == false) {
                             break
                         }
-                        var pass = findIn.checkLogin("password", data.admin);
+                        var pass = this.checkLogin("password", data.admin);
                         if (pass == false) {
                             break
                         }
-                        data = owner.manageEvent(data)
+                        var owners = new owner()
+                        data = owners.manageEvent(data)
                         break
                     case 2:
-                        var nam = findIn.checkLogin("name", data.admin);
+                        var nam = this.checkLogin("name", data.admin);
                         if (nam == false) {
                             break
                         }
-                        var pass = findIn.checkLogin("password", data.admin);
+                        var pass = this.checkLogin("password", data.admin);
                         if (pass == false) {
                             break
                         }
-                        data = manager.manageEvenetByAdmin(data)
+                        var managers = new manager()
+                        data = managers.manageEvenetByAdmin(data)
                         break
                     case 3:
-                        var nam = findIn.checkLogin("name", data.admin);
+                        var nam = this.checkLogin("name", data.admin);
                         if (nam == false) {
                             break
                         }
-                        var pass = findIn.checkLogin("password", data.admin);
+                        var pass = this.checkLogin("password", data.admin);
                         if (pass == false) {
                             break
                         }
-                        data = employee.manageEvntByEmployee(data)
+                        var employees = new employee()
+                        data = employees.manageEvntByEmployee(data)
                         break
                     case 4:
                         flag = 1;
@@ -706,10 +718,12 @@
                 var mainChoice = parseInt(valid.checkInput(mainch, numberReg))
                 switch (mainChoice) {
                     case 1:
-                        data = user.user(data)
+                        var user1 = new user()
+                        data = user1.user(data)
                         break;
                     case 2:
-                        data = admin.admin(data)
+                        var admin1 = new admin()
+                        data = admin1.admin(data)
                         break;
                     case 3:
                         flag = 1
@@ -719,6 +733,16 @@
                         return
                 }
             } while (flag == 0)
+        }
+    }
+
+    class staticAdmin {
+        constructor(id, name, password, role, status) {
+            this.id = id;
+            this.name = name;
+            this.password = password;
+            this.role = role;
+            this.status = status;
         }
     }
 
@@ -742,7 +766,16 @@
     if (localStorage.getItem('event') == null) {
         var userList = [];
         var eventlist = []
-        var adminlist = [{ id: 1, name: "sadmin", password: "sadmin", role: "superadmin", status: 0 }, { id: 2, name: "admin", password: "admin", role: "admin", status: 0 }, { id: 3, name: "employee1", password: "employee1", role: "employee", status: 0 }]
+        var adminlist = [] //static data of admin side
+        var id = 1, name = "sadmin", password = "sadmin", role = "superadmin", status = 0
+        var sadmin = new staticAdmin(id, name, password, role, status)
+        var id = 2, name = "admin", password = "admin", role = "admin", status = 0
+        var aadmin = new staticAdmin(id, name, password, role, status)
+        var id = 3, name = "employee1", password = "employee1", role = "employee", status = 0
+        var employees = new staticAdmin(id, name, password, role, status)
+        adminlist.push(sadmin)
+        adminlist.push(aadmin)
+        adminlist.push(employees)
         var bookinglist = []
         var data = { user: userList, event: eventlist, admin: adminlist, booking: bookinglist }
     }
